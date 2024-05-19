@@ -59,6 +59,10 @@ class Bl_info:
             ID = self.path.parent.name
         else:
             ID = self.path.name
+        if not getattr(self, 'url', None) or self.url == '':
+            self.url = 'https://blender.org'
+        if not getattr(self, 'description', None) or self.description == '':
+            self.description = 'A Blender Add-on'
 
         data = {
             'name': self.name,
