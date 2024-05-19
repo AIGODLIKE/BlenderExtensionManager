@@ -1,0 +1,63 @@
+class ExtensionsTags():
+    """https://docs.blender.org/manual/en/dev/extensions/tags.html"""
+    addons: list = ['3D View', 'Add Curve', 'Add Mesh', 'Animation', 'Bake', 'Camera', 'Compositing', 'Development',
+                    'Game Engine', 'Geometry Nodes', 'Grease Pencil', 'Import-Export', 'Lighting', 'Material',
+                    'Modeling',
+                    'Mesh', 'Node', 'Object', 'Paint', 'Pipeline', 'Physics', 'Render', 'Rigging', 'Scene', 'Sculpt',
+                    'Sequencer', 'System', 'Text Editor', 'Tracking', 'User Interface', 'UV']
+    themes: list = ['Dark', 'Light', 'Colorful', 'Inspired By', 'Print', 'Accessibility', 'High Contrast']
+
+
+class ExtensionsOptional():
+    blender_version_max: str = "5.1.0"
+    # * "files" (for access of any filesystem operations)
+    # * "network" (for internet access)
+    # * "clipboard" (to read and/or write the system clipboard)
+    # * "camera" (to capture photos and videos)
+    # * "microphone" (to capture audio)
+    # permissions = ["files", "network"]
+    permissions: list = ['files', 'network', 'clipboard', 'camera', 'microphone']
+    # copyright = [
+    #   "2002-2024 Developer Name",
+    #   "1998 Company Name",
+    copyright: list[str]
+    # bundle 3rd party Python modules. "./wheels/hexdump-3.3-py3-none-any.whl",
+    wheels: list[str]
+    # platforms = ["windows-amd64", "macos-arm64", "linux-x86_64"]
+    # Other supported platforms: "windows-arm64", "macos-x86_64"
+    platforms: list[str]
+
+
+class ExtensionsType():
+    addon = 'add-on'
+    theme = 'theme'
+
+
+class Schema():
+    """below attr is must have"""
+    id: str
+    name: str
+    version:str
+    tagline: str
+    maintainer: str
+    website: str
+    tags: list # ExtensionsTags
+    license: list
+    blender_version_min: str = '4.2.0'
+    type: str = 'add-on'
+    schema_version: str = '1.0.0'
+
+    def __init__(self, data):
+        for k, v in data.items():
+            if k in self.__annotations__:
+                setattr(self, k, v)
+            if k in ExtensionsOptional.__annotations__:
+                setattr(self, k, v)
+
+    def to_dict(self) -> dict:
+        data = {}
+        for k, v in self.__annotations__.items():
+            data[k] = getattr(self, k)
+        return data
+
+
