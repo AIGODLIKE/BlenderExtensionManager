@@ -58,6 +58,10 @@ class Schema():
         data = {}
         for k, v in self.__annotations__.items():
             data[k] = getattr(self, k)
+        # other attr
+        for k, v in ExtensionsOptional.__annotations__.items():
+            if hasattr(self, k):
+                data[k] = getattr(self, k)
         return data
 
     @staticmethod
@@ -69,4 +73,4 @@ class Schema():
             if k not in new_data:
                 new_data.pop(k)
 
-        return new_data.values()
+        return list(new_data.values())
