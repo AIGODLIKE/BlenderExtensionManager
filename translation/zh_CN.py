@@ -35,5 +35,13 @@ data = {
     'Save All': '保存全部',
     'Reload': '重新加载',
     'Reload From Disk': '从磁盘重新加载',
-    'Search':'搜索'
+    'Search': '搜索',
+    'Info': '信息',
+    'Error': '错误',
+    'Choose File': '选择文件',
+    'Selected': '已选择',
+    'Select a .py file': '选择一个.py文件',
+    'No Add-on Found': '未找到插件',
+    'Install Failed': '安装失败',
+    'Install Success': '安装成功',
 }

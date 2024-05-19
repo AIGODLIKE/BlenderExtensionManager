@@ -54,33 +54,6 @@ def write_repo_index(repo_name: str, data_list: list[str], version: str = '4.2')
     return (True, f'write success: {str(fp)}')
 
 
-def write_repo_index_with_id(repo_name: str, ori_id: str, data: dict, version: str = '4.2') -> tuple[bool, str]:
-    # backup dir
-    res, msg = backup_repo_index(repo_name)
-    if not res: return (res, msg)
-
-    import json
-    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
-    # read original data
-    with open(fp, 'r', encoding='utf-8') as f:
-        ori_data = json.load(f)
-
-    exts_data = ori_data.get('data')
-    for d in exts_data:
-        if d.get('id') == ori_id:
-            d.update(data)
-            break
-    ori_data['data'] = exts_data
-
-    try:
-        with open(fp, 'w', encoding='utf-8') as f:
-            json.dump(ori_data, f, ensure_ascii=False, indent=4)
-    except:
-        return (False, f'write failed: {str(fp)}')
-
-    return (True, f'write success: {str(fp)}')
-
-
 # def search_filter(search_list: list, query_word: str):
 #     import difflib
 #     res = difflib.get_close_matches(query_word, search_list, cutoff=0.5)
@@ -92,7 +65,11 @@ def draw_all_cards(repo: str, filter: Union[None, str] = None):
     name_index = get_b3d_local_repos(version='4.2')
     index_file = name_index.get(repo, None)
     datas = parse_repo_index_file(index_file)
+    if isinstance(datas, type(None)):
+        ui.label(f'{repo}:{index_file} error').style('color:red')
+        return
     for d in datas:
+        if not isinstance(d, dict): continue
         if filter:
             s = Schema.search_list(d)
             if not re.search(filter, str(s), re.I): continue

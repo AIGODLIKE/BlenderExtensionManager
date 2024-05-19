@@ -1,5 +1,5 @@
 from nicegui import ui, app
-from views import extension_view
+from views import extension_view, convert_view
 
 
 def draw():
@@ -15,11 +15,11 @@ def draw():
                 pass
             ui.tab('Convert', icon='change_circle').props('flat color=white')
             ui.tab('Settings', icon='settings').props('flat color=white')
-    with ui.tab_panels(tabs, value='Extensions').classes('w-full h-full px-0 p-0').props(
+    with ui.tab_panels(tabs, value='Convert').classes('w-full h-full px-0 p-0').props(
             'transition-prev=jump-up transition-next=jump-up'):
         with ui.tab_panel('Extensions'):
             extension_view.draw()
         with ui.tab_panel('Convert'):
-            pass
+            convert_view.draw()
         with ui.tab_panel('Settings'):
             pass
