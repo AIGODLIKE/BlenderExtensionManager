@@ -12,6 +12,8 @@ def open_file(repo_name: str, id: str):
     """open explorer or finder"""
     import sys, os
     fp = get_b3d_ext_dir().joinpath(repo_name, id)
+    if not fp.exists():
+        return
     if sys.platform == 'win32':
         os.startfile(fp)
     else:

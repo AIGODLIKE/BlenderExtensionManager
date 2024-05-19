@@ -47,4 +47,6 @@ data = {
     'Send to Repo': '发送到存储库',
     'Backup failed': '备份失败',
     'Backup success': '备份成功',
+    'Copied': '已复制',
+    'Pack to .zip extension': '打包为.zip扩展',
 }
