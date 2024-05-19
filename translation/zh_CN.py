@@ -32,4 +32,8 @@ data = {
     'Cancel': '取消',
     'Open Website': '打开网站',
     'Refreshed': '已刷新',
+    'Save All': '保存全部',
+    'Reload': '重新加载',
+    'Reload From Disk': '从磁盘重新加载',
+    'Search':'搜索'
 }

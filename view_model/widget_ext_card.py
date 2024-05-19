@@ -8,7 +8,14 @@ from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
 
 
-
+def open_file(repo_name: str, id: str):
+    """open explorer or finder"""
+    import sys, os
+    fp = get_b3d_ext_dir().joinpath(repo_name, id)
+    if sys.platform == 'win32':
+        os.startfile(fp)
+    else:
+        ui.notify(f'Platform not support yet', type='negative')
 
 
 class ExtensionCard(ui.card):
@@ -37,7 +44,7 @@ class ExtensionCard(ui.card):
 
     def draw_header(self):
 
-        with ui.row(wrap=False).classes('w-full items-center'):
+        with ui.row(wrap=True).classes('w-full items-center'):
             ui.label(self.data.get('name')).classes('font-semibold')
             ui.label(self.data.get('version')).classes('font-style: italic')
 
