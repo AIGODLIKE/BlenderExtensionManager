@@ -7,4 +7,4 @@ if __name__ in {"__main__", "__mp_main__"}:
     if len(sys.argv) > 1 and sys.argv[1] == "--web":
         ui.run()
     else:
-        ui.run(native=True,window_size=(1280,720))
+        ui.run(native=True, window_size=(1280, 720))
