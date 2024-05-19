@@ -70,6 +70,7 @@ class Bl_info:
             'type': 'add-on',
             'schema_version': '1.0.0',
             'tags': [self.category, ],
+            'license':[],
         }
 
         return data

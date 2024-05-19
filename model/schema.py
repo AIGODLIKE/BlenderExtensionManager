@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 class ExtensionsTags():
     """https://docs.blender.org/manual/en/dev/extensions/tags.html"""
     addons: list = ['3D View', 'Add Curve', 'Add Mesh', 'Animation', 'Bake', 'Camera', 'Compositing', 'Development',
@@ -74,3 +77,14 @@ class Schema():
                 new_data.pop(k)
 
         return list(new_data.values())
+
+    @staticmethod
+    def write(data: dict, directory: Path) -> bool:
+        'write_to a blender_manifest.toml file'
+        try:
+            with open(directory.joinpath('blender_manifest.toml'), 'w', encoding='utf-8') as f:
+                for k, v in data.items():
+                    f.write(f'{k} = {v}\n')
+        except Exception as e:
+            return False
+        return True

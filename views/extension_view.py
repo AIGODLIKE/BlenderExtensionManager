@@ -1,6 +1,6 @@
 from nicegui import ui, events
 from typing import Callable
-from public_path import get_b3d_local_repos
+from view_model.functions import get_b3d_local_repos
 from view_model.ext_card import draw_all_cards, save_all_cards
 from translation import _p
 

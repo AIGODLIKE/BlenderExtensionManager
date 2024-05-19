@@ -19,7 +19,7 @@ data = {
     'Extensions': '扩展',
     'Settings': '设置',
     'Platform not support yet': '平台尚不支持',
-    'Repo': '仓库',
+    'Repo': '存储库',
     'Optional': '可选',
     'Edit': '编辑',
     'files': '文件',
@@ -44,4 +44,7 @@ data = {
     'No Add-on Found': '未找到插件',
     'Install Failed': '安装失败',
     'Install Success': '安装成功',
+    'Send to Repo': '发送到存储库',
+    'Backup failed': '备份失败',
+    'Backup success': '备份成功',
 }
