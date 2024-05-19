@@ -55,22 +55,16 @@ class ExtensionCard(ui.card):
         super().__init__()
         self.schema = Schema(data)
         self.data, self.set_data = ui.state(data)
-
         self.repo_name = ''
-
         self.expand, self.set_expand = ui.state(False)
 
-    def update_from_data(self):
-        self.set_data(self.schema.to_dict())
-        ui.update(self)
-
-    def draw(self):
-        with ui.expansion().bind_value(self, 'expand') \
-                .classes('w-full') \
-                .props('dense expand-icon-toggle expand-separator switch-toggle-side') as expansion:
-            with expansion.add_slot('header'):
-                self.draw_header()
-            self.draw_expand()
+        with self:
+            with ui.expansion().bind_value(self, 'expand') \
+                    .classes('w-full') \
+                    .props('dense expand-icon-toggle expand-separator switch-toggle-side') as expansion:
+                with expansion.add_slot('header'):
+                    self.draw_header()
+                self.draw_expand()
 
     async def open_edit_dialog(self):
         res: Union[None, dict] = await CardEditDialog(self.data)
@@ -89,7 +83,7 @@ class ExtensionCard(ui.card):
 
             ui.space()
 
-            tags = self.data.get('tags')
+            tags = self.data.get('tags',[])
             ui.label(_p(self.data.get('type'))).classes('font-medium')
             with ui.row().classes('gap-0'):
                 for tag in tags:
