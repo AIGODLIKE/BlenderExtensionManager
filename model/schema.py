@@ -37,11 +37,11 @@ class Schema():
     """below attr is must have"""
     id: str
     name: str
-    version:str
+    version: str
     tagline: str
     maintainer: str
     website: str
-    tags: list # ExtensionsTags
+    tags: list  # ExtensionsTags
     license: list
     blender_version_min: str = '4.2.0'
     type: str = 'add-on'
@@ -60,4 +60,13 @@ class Schema():
             data[k] = getattr(self, k)
         return data
 
+    @staticmethod
+    def search_list(data: dict) -> list:
+        # remove
+        new_data = data
+        keys = ['id', 'name', 'tagline', 'maintainer']
+        for k in keys:
+            if k not in new_data:
+                new_data.pop(k)
 
+        return new_data.values()
