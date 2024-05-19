@@ -1,26 +1,18 @@
 from nicegui import ui
-
-from view_model.widget_ext_card import get_b3d_local_repos, parse_repo_index_file, ExtensionCard
+from typing import Callable
+from public_path import get_b3d_local_repos
+from view_model.ext_card import draw_all_cards
 from translation import _p
-
-
-def draw_all_cards(repo: str):
-    name_index = get_b3d_local_repos(version='4.2')
-    index_file = name_index.get(repo, None)
-    datas = parse_repo_index_file(index_file)
-    for d in datas:
-        with ExtensionCard(d).classes('w-full shadow-1').tight() as card:
-            card.repo_name = repo
 
 
 @ui.refreshable
 def draw():
-    repos, set_repos = ui.state(list(get_b3d_local_repos().keys()))
+    repos, set_repos = ui.state(list(get_b3d_local_repos()))
     repo, set_repo = ui.state('user_default')
-    selects = {repo: repo for repo in repos}
+    selects: dict = {repo: repo for repo in repos}
 
     def refresh_repos():
-        new_repos = list(get_b3d_local_repos().keys())
+        new_repos = list(get_b3d_local_repos())
         set_repos(new_repos)
         set_repo('user_default')
 
@@ -41,5 +33,3 @@ def draw():
 
         with ui.column().classes('w-full px-0 p-0') as list_all_cards:
             draw_all_cards(repo)
-
-    # cards.append(card)
