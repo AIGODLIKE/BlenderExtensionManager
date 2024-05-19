@@ -48,5 +48,11 @@ data = {
     'Backup failed': '备份失败',
     'Backup success': '备份成功',
     'Copied': '已复制',
+    'Python Command': 'Python命令',
     'Pack to .zip extension': '打包为.zip扩展',
+    'Required': '必需',
+    'Must be x.x.x': '必须是x.x.x',
+    'Length must be 3 or more': '长度必须为3或更多',
+    'A Blender Add-on': '一个Blender插件',
+    'is empty': '为空',
 }

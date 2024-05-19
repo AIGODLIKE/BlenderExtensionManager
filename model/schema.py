@@ -79,14 +79,17 @@ class Schema():
         return list(new_data.values())
 
     @staticmethod
-    def write(data: dict, directory: Path) -> bool:
+    def write_toml(data: dict, directory: Path) -> bool:
         'write_to a blender_manifest.toml file'
-        import tomllib
         try:
             with open(directory.joinpath('blender_manifest.toml'), 'w', encoding='utf-8') as f:
                 for k, v in data.items():
                     if isinstance(v, str):
                         # name = "addon_name"
+                        if k == 'website' and v == '':
+                            v = 'https://blender.org'
+                        if k == 'tagline' and v == '':
+                            v = 'A Blender Add-on'
                         f.write(f'{k} = "{v}"\n')
                     elif isinstance(v, list):
                         # ['1','2','3',...]
@@ -98,7 +101,12 @@ class Schema():
             return False
         return True
 
-        # # toml
-        # toml_str = tomllib
-        # with open(directory.joinpath('blender_manifest.toml'), 'w', encoding='utf-8') as f:
-        #     f.write(toml_str)
+    @staticmethod
+    def load_toml(directory: Path) -> dict:
+        # toml
+        import tomllib
+        toml_str = tomllib
+        with open(directory.joinpath('blender_manifest.toml'), 'r', encoding='utf-8') as f:
+            data = toml_str.loads(f.read())
+
+        return data

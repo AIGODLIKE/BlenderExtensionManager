@@ -44,8 +44,12 @@ class ExtensionCard(ui.card):
         ui.update(self)
         ui.notify(self.data.get('name') + ' ' + _p(f'Edit Saved!'))
 
-    def draw_header(self):
+    def copy_text(self, text: str):
+        if isinstance(text, str):
+            ui.clipboard.write(text)
+            ui.notify(_p('Copied') + ' ' + text)
 
+    def draw_header(self):
         with ui.row(wrap=True).classes('w-full items-center'):
             ui.label(self.data.get('name')).classes('font-semibold')
             ui.label(self.data.get('version')).classes('font-style: italic')
@@ -58,23 +62,25 @@ class ExtensionCard(ui.card):
                 for tag in tags:
                     ui.chip(tag, color='primary', text_color='primary').props('outline')
 
-            with ui.button_group().props('flat bordered'):
+            with ui.button_group().props('flat'):
                 with ui.button(icon='folder',
                                on_click=lambda: open_file(repo_name=self.repo_name, id=self.data.get('id'))).props(
                     'round flat'):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
-                with ui.button(icon='edit', on_click=self.open_edit_dialog).props('round flat'):
+                with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
 
     def draw_expand(self):
         with ui.card_section().classes('w-full').props('dense-toggle'):
             with ui.element('q-list').props('dense bordered'):
                 # Required data
-                with ui.element('q-item').classes('items-center').props('clickable'):
+                with ui.element('q-item').classes('items-center').props('clickable') \
+                        .on('dblclick', lambda: self.copy_text(self.data.get('id'))):
                     ui.label('ID')
                     ui.space()
                     ui.label(self.data.get('id')).classes('font-semibold')
-                with ui.element('q-item').classes('items-center').props('clickable'):
+                with ui.element('q-item').classes('items-center').props('clickable') \
+                        .on('dblclick', lambda: self.copy_text(self.data.get('maintainer'))):
                     ui.label(_p('maintainer').title())
                     ui.space()
                     ui.label(self.data.get('maintainer'))
@@ -86,7 +92,8 @@ class ExtensionCard(ui.card):
                     elif k in ExtensionsOptional.__annotations__.keys():
                         continue
                     else:
-                        with ui.element('q-item').classes('w-full items-center').props('clickable'):
+                        with ui.element('q-item').classes('w-full items-center').props('clickable') \
+                                .on('dblclick', lambda: self.copy_text(self.data.get(k))):
                             ui.label(_p(k))
                             ui.space()
                             ui.label(v)

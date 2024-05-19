@@ -37,7 +37,7 @@ def draw():
 
         search_field = ui.input(on_change=search, placeholder=_p('Search')) \
             .props('outlined rounded item-aligned input-class="ml-3" debounce="500"') \
-            .classes('w-64 transition-all')
+            .classes('transition-all').style('min-width: 400px; max-width: 600px')
         with search_field.add_slot('prepend'):
             ui.icon('search')
         with search_field.add_slot('append'):
