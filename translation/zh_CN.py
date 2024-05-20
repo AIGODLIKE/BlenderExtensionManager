@@ -55,4 +55,13 @@ data = {
     'Length must be 3 or more': '长度必须为3或更多',
     'A Blender Add-on': '一个Blender插件',
     'is empty': '为空',
+    'White': '白',
+    'Dark': '暗',
+    'Auto': '自动',
+    'Theme': '主题',
+    'Config saved, restart the program to take effect': '配置已保存，重新启动程序以生效',
+    'Select': '选择',
+    'Default Tab': '默认选项卡',
+    'Language': '语言',
+    'Language set, save config and restart the program to take effect': '语言已设置，保存配置并重新启动程序以生效',
 }

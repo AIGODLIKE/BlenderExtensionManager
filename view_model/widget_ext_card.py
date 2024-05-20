@@ -58,7 +58,11 @@ class ExtensionCard(ui.card):
 
     def draw_header(self):
         with ui.row(wrap=True).classes('w-full items-center'):
-            ui.label(self.data.get('name')).classes('font-semibold')
+            if Schema.is_valid(self.data):
+                ui.label(self.data.get('name')).classes('font-semibold')
+            else:
+                with ui.label(self.data.get('name')).classes('font-semibold').props('color="red"'):
+                    ui.tooltip(_p('Invalid data')).style('font-size: 100%').props('bg-color="red"')
             ui.label(self.data.get('version')).classes('font-style: italic')
 
             ui.space()

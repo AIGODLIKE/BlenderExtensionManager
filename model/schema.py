@@ -110,3 +110,23 @@ class Schema():
             data = toml_str.loads(f.read())
 
         return data
+
+    @staticmethod
+    def is_valid(data: dict)->bool:
+        """check if the data is valid"""
+        for k,_ in Schema.__annotations__:
+            v  = data.get(k, None)
+            if not v: return False
+
+            if isinstance(v, str):
+                if v == '':
+                    return False
+                elif k in {'version', 'blender_version_min'}:
+                    if v.split('.') != 3:
+                        return False
+                    elif not all([i.isdigit() for i in v.split('.')]):
+                        return False
+            elif isinstance(v, list):
+                if len(v) == 0:
+                    return False
+        return True
