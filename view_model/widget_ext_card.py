@@ -53,6 +53,7 @@ class ExtensionCard(ui.card):
         # remove card from the container
         with ui.dialog() as dialog, ui.card().classes('items-center'):
             ui.label(_p('Are you sure to remove') + ' ' + self.data.get('name') + ' ?')
+            ui.label(_p('This action only remove blender register')).style('font-size: 80%')
             with ui.row().classes('w-full'):
                 ui.button('No', on_click=lambda: dialog.submit(False)).props('flat color="primary"')
                 ui.button('Yes', on_click=lambda: dialog.submit(True)).props('color="red"')

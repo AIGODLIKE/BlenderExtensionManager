@@ -70,4 +70,5 @@ data = {
     'must be digits': '必须是数字',
     'Removed': '已移除',
     'Are you sure to remove': '确定要移除',
+    'This action only remove blender register': '此操作仅移除Blender注册',
 }

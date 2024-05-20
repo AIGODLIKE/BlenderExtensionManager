@@ -4,9 +4,13 @@ from views.setttings_view import config
 
 
 def draw():
-    with ui.header().classes(replace='row items-center pywebview-drag-region', ) as header:
-        ui.button(icon='menu', on_click=lambda: left_drawer.toggle()).props('flat color=white')
-        ui.button(on_click=app.shutdown, icon='close').props('flat color=white')
+    with ui.header().classes(replace='row items-center pywebview-drag-region h-12') as header:
+        with ui.row().classes('w-full items-center px-2'):
+            ui.button(icon='menu', on_click=lambda: left_drawer.toggle()).props('flat color=white')
+            ui.label('Blender Extension Manager').classes('text-lg').style('font-family: "Comic Sans MS"')
+            ui.space()
+            ui.button(on_click=app.shutdown, icon='close').props('flat color=white')
+
 
     with ui.left_drawer().classes('w-full px-0 p-0').props('width=100 breakpoint=500') as left_drawer:
         with ui.tabs().classes('text-grey-6').props(
@@ -24,3 +28,6 @@ def draw():
             convert_view.draw()
         with ui.tab_panel('Settings'):
             setttings_view.draw()
+
+    with ui.page_sticky(position='bottom-right',y_offset=10,x_offset=10):
+        pass
