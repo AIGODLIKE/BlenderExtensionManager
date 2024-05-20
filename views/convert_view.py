@@ -53,7 +53,7 @@ def draw():
                 shutil.copytree(fp.parent, dest_dir, dirs_exist_ok=True)
             else:
                 shutil.copy2(fp, dest_dir)
-            Schema.write(directory=dest_dir, data=card.data)
+            Schema.write_toml(directory=dest_dir, data=card.data)
             write_repo_index_with_id(repo, card.data)
         except Exception as e:
             ui.notify(_p(f'Install Failed') + f':{e}', multi_line=True, close_button='OK', type='negative')

@@ -64,4 +64,8 @@ data = {
     'Default Tab': '默认选项卡',
     'Language': '语言',
     'Language set, save config and restart the program to take effect': '语言已设置，保存配置并重新启动程序以生效',
+    'Invalid data': '无效数据',
+    'is missing': '丢失',
+    'must be 3 digits': '必须是3位数',
+    'must be digits': '必须是数字',
 }

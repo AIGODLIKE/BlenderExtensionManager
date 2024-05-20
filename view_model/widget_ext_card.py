@@ -6,12 +6,16 @@ from public_path import get_b3d_ext_dir
 from model.schema import Schema, ExtensionsOptional
 from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
+from pathlib import Path
 
 
-def open_file(repo_name: str, id: str):
+def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
     """open explorer or finder"""
     import sys, os
-    fp = get_b3d_ext_dir().joinpath(repo_name, id)
+    if designation is not None:
+        fp = designation
+    else:
+        fp = get_b3d_ext_dir().joinpath(repo_name, id)
     if not fp.exists():
         return
     if sys.platform == 'win32':
@@ -27,6 +31,7 @@ class ExtensionCard(ui.card):
         self.data = data
         self.repo_name = ''
         self.expand = False
+        self.addon_path = None  # Path to the __init__.py file of the addon
 
         with self:
             self.draw()
@@ -57,12 +62,13 @@ class ExtensionCard(ui.card):
             ui.notify(_p('Copied') + ' ' + text)
 
     def draw_header(self):
-        with ui.row(wrap=True).classes('w-full items-center'):
-            if Schema.is_valid(self.data):
-                ui.label(self.data.get('name')).classes('font-semibold')
-            else:
-                with ui.label(self.data.get('name')).classes('font-semibold').props('color="red"'):
-                    ui.tooltip(_p('Invalid data')).style('font-size: 100%').props('bg-color="red"')
+        with ui.row(wrap=True).classes('w-full items-center gap-2'):
+            is_valid, msg = Schema.is_valid(self.data)
+            if not is_valid:
+                with ui.icon('error').props('color="red"'):
+                    ui.tooltip(msg).style('font-size: 100%')
+
+            ui.label(self.data.get('name')).classes('font-semibold')
             ui.label(self.data.get('version')).classes('font-style: italic')
 
             ui.space()
@@ -75,8 +81,11 @@ class ExtensionCard(ui.card):
 
             with ui.button_group().props('flat'):
                 with ui.button(icon='folder',
-                               on_click=lambda: open_file(repo_name=self.repo_name, id=self.data.get('id'))).props(
-                    'round flat'):
+                               on_click=lambda: open_file(
+                                   repo_name=self.repo_name,
+                                   id=self.data.get('id'),
+                                   designation=self.addon_path)
+                               ).props('round flat'):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')

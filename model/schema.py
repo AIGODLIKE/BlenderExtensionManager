@@ -1,4 +1,5 @@
 from pathlib import Path
+from translation import _p
 
 
 class ExtensionsTags():
@@ -112,21 +113,21 @@ class Schema():
         return data
 
     @staticmethod
-    def is_valid(data: dict)->bool:
+    def is_valid(data: dict) -> tuple[bool, str]:
         """check if the data is valid"""
-        for k,_ in Schema.__annotations__:
-            v  = data.get(k, None)
-            if not v: return False
-
+        for k in Schema.__annotations__.keys():
+            if k not in data:
+                return False, f'{_p(k)} {_p("is missing")}'
+        for k, v in data.items():
             if isinstance(v, str):
                 if v == '':
-                    return False
+                    return False, f'{_p(k)} {_p("is empty")}'
                 elif k in {'version', 'blender_version_min'}:
-                    if v.split('.') != 3:
-                        return False
+                    if len(v.split('.')) != 3:
+                        return False, f'{_p(k)} {_p("must be 3 digits")}'
                     elif not all([i.isdigit() for i in v.split('.')]):
-                        return False
+                        return False, f'{_p(k)} {_p("must be digits")}'
             elif isinstance(v, list):
                 if len(v) == 0:
-                    return False
-        return True
+                    return False, f'{_p(k)} {_p("is empty")}'
+        return True, 'valid'

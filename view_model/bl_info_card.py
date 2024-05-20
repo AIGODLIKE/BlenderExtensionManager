@@ -18,3 +18,4 @@ def draw_bl_info_card(path: Path):
     schema_data = bl_info.to_schema_data()
     card = ExtensionCard(schema_data).classes('w-full').props('bordered')
     card.expand = True
+    card.addon_path = path.parent

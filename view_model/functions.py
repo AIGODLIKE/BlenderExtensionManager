@@ -33,9 +33,6 @@ def get_b3d_local_repos(version: str = '4.2') -> Union[dict[str, Path], None]:
     return repo_index_file
 
 
-
-
-
 def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], None]:
     import json
     with open(fp, mode='r', encoding='utf-8') as f:
