@@ -15,7 +15,10 @@ class State():
 @ui.refreshable
 def draw():
     def refresh_bl_info():
-        container.clear()
+        try:
+            container.clear()
+        except:
+            pass
         with container:
             draw_bl_info_card(Path(State.filepath))
 
@@ -57,13 +60,17 @@ def draw():
         ui.notify(_p('Install Success'), type='positive')
 
     with ui.row().classes('w-full items-center'):
-        pick_file = ui.input(value='', placeholder=_p('Select a .py file'), on_change=lambda: refresh_bl_info()).props(
-            'readonly outlined').style('min-width:400px;max-width:800px').bind_value(State, 'filepath')
+        pick_file = ui.input(value='', placeholder=_p('Select a .py file'), on_change=lambda: refresh_bl_info()) \
+            .on('click', choose_file) \
+            .props('readonly outlined') \
+            .style('min-width:400px;max-width:800px').bind_value(State, 'filepath')
+
         with pick_file.add_slot('append'):
             ui.button(icon='content_copy', on_click=copy2clipboard) \
                 .bind_visibility_from(pick_file, 'value', lambda v: v != '').props('flat color="primary"')
-            with ui.button(icon='add', on_click=choose_file).props('flat color="primary"'):
-                ui.tooltip(_p('Choose File')).style('font-size: 100%')
+        with pick_file.add_slot('prepend'):
+            ui.icon('folder').on('click', choose_file) \
+                .props('flat color="primary"').bind_visibility_from(pick_file, 'value', lambda v: v == '')
         ui.space()
 
         with ui.button_group().props('rounded'):

@@ -75,6 +75,7 @@ class Bl_info:
             'schema_version': '1.0.0',
             'tags': [self.category, ],
             'license': ['license', ],
+            'website': self.url,
         }
 
         return data
