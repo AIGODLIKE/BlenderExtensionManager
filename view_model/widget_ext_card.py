@@ -24,25 +24,32 @@ class ExtensionCard(ui.card):
     def __init__(self, data: dict):
         super().__init__()
         self.schema = Schema(data)
-        self.data, self.set_data = ui.state(data)
+        self.data = data
         self.repo_name = ''
-        self.expand, self.set_expand = ui.state(False)
+        self.expand = False
 
         with self:
-            with ui.expansion().bind_value(self, 'expand') \
-                    .classes('w-full') \
-                    .props('dense expand-icon-toggle expand-separator switch-toggle-side') as expansion:
-                with expansion.add_slot('header'):
-                    self.draw_header()
-                self.draw_expand()
+            self.draw()
 
     async def open_edit_dialog(self):
         res: Union[None, dict] = await CardEditDialog(self.data)
         if not res: return
-        self.set_data(res)
-        self.set_expand(self.expand)
-        ui.update(self)
+        self.data = res
+        # print(self.data)
         ui.notify(self.data.get('name') + ' ' + _p(f'Edit Saved!'))
+        self.update()
+        self.clear()
+
+        with self:
+            self.draw()
+
+    def draw(self):
+        with ui.expansion().bind_value(self, 'expand') \
+                .classes('w-full') \
+                .props('dense expand-icon-toggle expand-separator switch-toggle-side') as expansion:
+            with expansion.add_slot('header'):
+                self.draw_header()
+            self.draw_expand()
 
     def copy_text(self, text: str):
         if isinstance(text, str):

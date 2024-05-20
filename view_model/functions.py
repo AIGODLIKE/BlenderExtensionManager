@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from public_path import get_b3d_ext_dir
 from pathlib import Path
 from translation import _p
@@ -31,6 +31,9 @@ def get_b3d_local_repos(version: str = '4.2') -> Union[dict[str, Path], None]:
             repo_index_file[directory.name] = directory.joinpath('.blender_ext', 'index.json')
 
     return repo_index_file
+
+
+
 
 
 def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], None]:

@@ -16,7 +16,7 @@ class CardEditDialog(ui.dialog):
     def __init__(self, data: dict):
         super().__init__()
         self.scheme = Schema(data)
-        self.keyboard = ui.keyboard(on_key=lambda e: self.handle_keyboard(e))
+        # self.keyboard = ui.keyboard(on_key=lambda e: self.handle_keyboard(e))
 
         with self.props('position="right"'), ui.card().classes('w-full items-center').props('rounded'):
             ui.input(label=_p('name'), validation=empty_validation, ) \
@@ -67,6 +67,6 @@ class CardEditDialog(ui.dialog):
 
     def handle_keyboard(self, e: events.KeyEventArguments):
         if e.key == 'Enter':
-            self.submit(self.scheme.to_dict())
+            self.handle_ok()
         elif e.key == 'Escape':
             self.submit(None)

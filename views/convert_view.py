@@ -1,6 +1,8 @@
 import shutil
 from nicegui import ui, events, app
 from pathlib import Path
+import asyncio
+
 from view_model.bl_info_card import draw_bl_info_card
 from view_model.functions import write_repo_index_with_id
 from translation import _p
@@ -14,13 +16,13 @@ class State():
 
 @ui.refreshable
 def draw():
-    def refresh_bl_info():
+    async def refresh_bl_info():
         try:
             container.clear()
-        except:
-            pass
-        with container:
-            draw_bl_info_card(Path(State.filepath))
+            with container:
+                draw_bl_info_card(Path(State.filepath))
+        except Exception as e:
+            print(e)
 
     async def choose_file():
         files = await app.native.main_window.create_file_dialog(allow_multiple=False)
@@ -60,7 +62,7 @@ def draw():
         ui.notify(_p('Install Success'), type='positive')
 
     with ui.row().classes('w-full items-center'):
-        pick_file = ui.input(value='', placeholder=_p('Select a .py file'), on_change=lambda: refresh_bl_info()) \
+        pick_file = ui.input(value='', placeholder=_p('Select a .py file'), on_change=refresh_bl_info) \
             .on('click', choose_file) \
             .props('readonly outlined') \
             .style('min-width:400px;max-width:800px').bind_value(State, 'filepath')
@@ -74,6 +76,7 @@ def draw():
         ui.space()
 
         with ui.button_group().props('rounded'):
+            with ui.button(icon='refresh', on_click=refresh_bl_info): pass
             with ui.button(icon='install_desktop', on_click=lambda: copy2repo('user_default')) \
                     .classes('h-12') \
                     .props('color="primary"'):
