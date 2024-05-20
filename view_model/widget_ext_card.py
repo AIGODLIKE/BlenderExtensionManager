@@ -109,8 +109,8 @@ class ExtensionCard(ui.card):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
-                if not self.addon_path:  # only extension card
-                    ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"')
+                ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"') \
+                    .bind_visibility_from(self, 'addon_path', lambda v: not v)
 
     def draw_expand(self):
         with ui.card_section().classes('w-full').props('dense-toggle'):
