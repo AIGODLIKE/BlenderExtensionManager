@@ -3,22 +3,20 @@ import nicegui
 from nicegui import ui, app
 from views import main_window
 
-DEV_MODE = True
-
 if __name__ in {"__main__", "__mp_main__"}:
-    main_window.draw()
-    args = {
-        'title': "Blender Extension Manager",
-        'reload': DEV_MODE,  # true for develop
-    }
+    app.native.window_args['easy_drag'] = False
+    args = {'title': "Blender Extension Manager", }
 
-    if len(sys.argv) > 1 and "--web" in sys.argv:
-        _args = {}
-    else:
-        _args = {
+    if '--web' not in sys.argv:
+        args.update({
             'native': True,
             'window_size': (1280, 720),
             'frameless': True,
-        }
-    args.update(_args)
+        })
+    if '--dev' in sys.argv:
+        args['reload'] = True
+    else:
+        args['reload'] = False
+
+    main_window.draw()
     ui.run(**args)

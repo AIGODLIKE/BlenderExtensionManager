@@ -5,6 +5,19 @@ from model.config import Config
 
 dark = ui.dark_mode()
 config = Config()
+dark_mode = config.data.get('dark_mode', 'auto')
+
+
+def init_theme(dark_mode: str):
+    if dark_mode == 'dark':
+        dark.enable()
+    elif dark_mode == 'white':
+        dark.disable()
+    else:
+        dark.auto()
+
+
+init_theme(dark_mode)
 
 
 def save_config():
@@ -13,29 +26,23 @@ def save_config():
     ui.notify(_p('Config saved, restart the program to take effect'), type='positive')
 
 
-def set_theme(v):
+def on_change_theme(v):
     theme_map = {
         False: 'white',
         True: 'dark',
         None: 'auto'
     }
 
-    value = v.value
-    if value == 'white':
-        dark.disable()
-    elif value == 'dark':
-        dark.enable()
-    else:
-        dark.auto()
+    init_theme(v.value)
     config.data['dark_mode'] = theme_map[dark.value]
 
 
-def set_language(v):
+def on_change_lang(v):
     config.data['language'] = v.value
-    ui.notify(_p('Language set, save config and restart the program to take effect'), type='info')
+    ui.notify(_p('Language set, save config and restart the program to take effect'))
 
 
-def set_tab(v):
+def on_change_tab(v):
     config.data['default_tab'] = v.value
     config._save()
 
@@ -51,7 +58,7 @@ def draw():
                 ui.label(_p("Default Tab"))
                 ui.space()
                 ui.select(value=config.data['default_tab'], options=['Extensions', 'Convert', 'Settings'],
-                          on_change=set_tab)
+                          on_change=on_change_tab)
 
         with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
             with ui.row().classes('w-full items-center px-2'):
@@ -61,7 +68,7 @@ def draw():
                     'white': _p('White'),
                     'dark': _p('Dark'),
                     'auto': _p('Auto')
-                }, on_change=set_theme)
+                }, on_change=on_change_theme)
 
         with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
             with ui.row().classes('w-full items-center px-2'):
@@ -70,4 +77,4 @@ def draw():
                 ui.select(value=config.data['language'], options={
                     'zh_CN': '中文',
                     'en_US': 'English'
-                }, on_change=set_language)
+                }, on_change=on_change_lang)

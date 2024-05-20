@@ -76,14 +76,15 @@ def draw():
         ui.space()
 
         with ui.button_group().props('rounded'):
-            with ui.button(icon='refresh', on_click=refresh_bl_info): pass
+            with ui.button(icon='refresh', on_click=refresh_bl_info):
+                ui.tooltip(_p('Reload')).style('font-size: 100%')
             with ui.button(icon='install_desktop', on_click=lambda: copy2repo('user_default')) \
                     .classes('h-12') \
                     .props('color="primary"'):
                 ui.tooltip(_p('Send to Repo')).style('font-size: 100%')
-            with ui.button(icon='create_new_folder') \
-                    .classes('h-12').props('color="primary"'):
-                ui.tooltip(_p('Pack to .zip extension')).style('font-size: 100%')
+            # with ui.button(icon='create_new_folder') \
+            #         .classes('h-12').props('color="primary"'):
+            #     ui.tooltip(_p('Pack to .zip extension')).style('font-size: 100%')
 
     with ui.column().classes('w-full') as container:
         draw_bl_info_card(Path(State.filepath))
