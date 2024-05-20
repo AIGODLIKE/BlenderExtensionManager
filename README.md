@@ -2,15 +2,20 @@
 
 This is a native app which allow you to install, update and remove Blender extensions
 
+# Download
+
+TODO
+
 # Feature
 
 + Extension manage(Local repo)
-    + select different repo
-    + edit / remove extension
-    + search
+    1. select one repo
+    2. edit / remove extension
+    3. search
 + Convert addon to extension
-    + select .py/ folder addon
-    + make it an extension and send to repo
+    1. select .py/ folder addon
+    2. make it an extension
+    3. edit and send to repo
 + Edit extension
     + edit extension info
     + edit extension tags
@@ -21,17 +26,31 @@ This is a native app which allow you to install, update and remove Blender exten
 
 ![view1png](doc/images/view3.png)
 
-Edit Dialog / Edit Tag
+Edit Dialog / Edit Tags
 
 ![](doc/images/dialog.png)
 
 ![](doc/images/tagEdit.png)
 
-# Develop
 
-> use venv to setup, run and build
 
-install dependencies
+# Usage
+
+1. Clone the repository
+
+```
+git clone <repository_url>
+cd <repository_directory>
+```
+
+2. Set up a virtual environment
+
+```
+python -m venv venv
+venv\Scripts\activate  # on Windows
+```
+
+3. Install the required dependencies
 
 ```
 pip install -r requirements.txt
@@ -40,10 +59,8 @@ pip install -r requirements.txt
 ### run
 
 ```
-main.py
+python main.py --dev
 ```
-
-args
 
 + `--dev` auto-reload
 + `--web` run on browser
@@ -54,5 +71,5 @@ args
 > windows_output: .dist/BME.exe
 
 ```
-build.py
+python build.py
 ```
