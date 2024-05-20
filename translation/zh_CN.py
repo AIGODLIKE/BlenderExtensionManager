@@ -59,6 +59,7 @@ data = {
     'Dark': '暗',
     'Auto': '自动',
     'Theme': '主题',
+    'Add': '添加',
     'Config saved, restart the program to take effect': '配置已保存，重新启动程序以生效',
     'Select': '选择',
     'Default Tab': '默认选项卡',
@@ -71,4 +72,7 @@ data = {
     'Removed': '已移除',
     'Are you sure to remove': '确定要移除',
     'This action only remove blender register': '此操作仅移除Blender注册',
+    'Tag already exists': '标签已存在',
+    'At least one tag': '至少一个标签',
+    'Tags updated': '标签已更新',
 }
