@@ -106,3 +106,22 @@ def write_repo_index_with_id(repo_name: str, data: dict, version: str = '4.2') -
         return (False, f'write failed: {str(fp)}')
 
     return (True, f'write success: {str(fp)}')
+
+
+def remove_repo_index_by_id(repo_name: str, id: str, version: str = '4.2') -> tuple[bool, str]:
+    import json
+    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
+    with open(fp, 'r', encoding='utf-8') as f:
+        ori_data = json.load(f)
+    data_list: list = ori_data.get('data')
+    for i, d in enumerate(data_list):
+        if d.get('id') == id:
+            data_list.pop(i)
+            break
+    try:
+        with open(fp, 'w', encoding='utf-8') as f:
+            json.dump(ori_data, f, ensure_ascii=False, indent=4)
+    except:
+        return (False, f'write failed: {str(fp)}')
+
+    return (True, f'write success: {str(fp)}')

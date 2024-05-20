@@ -1,12 +1,13 @@
 from nicegui import ui
 from typing import Union, Callable
 from functools import partial
+from pathlib import Path
 
 from public_path import get_b3d_ext_dir
 from model.schema import Schema, ExtensionsOptional
 from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
-from pathlib import Path
+from view_model.functions import remove_repo_index_by_id
 
 
 def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
@@ -47,6 +48,24 @@ class ExtensionCard(ui.card):
 
         with self:
             self.draw()
+
+    async def remove_card(self):
+        # remove card from the container
+        with ui.dialog() as dialog, ui.card().classes('items-center'):
+            ui.label(_p('Are you sure to remove') + ' ' + self.data.get('name') + ' ?')
+            with ui.row().classes('w-full'):
+                ui.button('No', on_click=lambda: dialog.submit(False)).props('flat color="primary"')
+                ui.button('Yes', on_click=lambda: dialog.submit(True)).props('color="red"')
+        result = await dialog
+        if result:
+            res, msg = remove_repo_index_by_id(self.repo_name, self.data.get('id'))
+            if res:
+                ui.notify(_p('Removed') + ' ' + self.data.get('name'))
+                self.clear()
+                self.delete()
+                ui.update()
+            else:
+                ui.notify(msg, type='negative')
 
     def draw(self):
         with ui.expansion().bind_value(self, 'expand') \
@@ -89,6 +108,8 @@ class ExtensionCard(ui.card):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
+                if not self.addon_path:  # only extension card
+                    ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"')
 
     def draw_expand(self):
         with ui.card_section().classes('w-full').props('dense-toggle'):

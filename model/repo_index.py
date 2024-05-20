@@ -1,7 +1,7 @@
 from pathlib import Path
 from translation import _p
 
-
+# TODO change view_model.function to model.repo_index
 class RepoIndexFile():
     def __init__(self, fp: Path):
         self.fp = fp

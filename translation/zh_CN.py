@@ -68,4 +68,6 @@ data = {
     'is missing': '丢失',
     'must be 3 digits': '必须是3位数',
     'must be digits': '必须是数字',
+    'Removed': '已移除',
+    'Are you sure to remove': '确定要移除',
 }
