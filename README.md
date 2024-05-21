@@ -5,6 +5,7 @@ This is a native app which allow you to install, update and remove Blender exten
 # Download
 
 TODO
+1. add build test
 
 # Feature
 
