@@ -44,7 +44,7 @@ data = {
     'No Add-on Found': '未找到插件',
     'Install Failed': '安装失败',
     'Install Success': '安装成功',
-    'Send to Repo': '发送到存储库',
+    'Send to': '发送到',
     'Backup failed': '备份失败',
     'Backup success': '备份成功',
     'Copied': '已复制',
@@ -76,4 +76,6 @@ data = {
     'At least one tag': '至少一个标签',
     'Tags updated': '标签已更新',
     'Convert': '转换',
+    'Select Repo': '选择存储库',
+    'Send to repo': '发送到存储库',
 }

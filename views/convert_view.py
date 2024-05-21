@@ -4,7 +4,7 @@ from pathlib import Path
 import asyncio
 
 from view_model.bl_info_card import draw_bl_info_card
-from view_model.functions import write_repo_index_with_id
+from view_model.functions import write_repo_index_with_id, get_b3d_local_repos
 from translation import _p
 from public_path import get_b3d_ext_dir
 from model.schema import Schema
@@ -16,6 +16,8 @@ class State():
 
 @ui.refreshable
 def draw():
+    repos = list(get_b3d_local_repos())
+
     async def refresh_bl_info():
         try:
             container.clear()
@@ -23,6 +25,11 @@ def draw():
                 draw_bl_info_card(Path(State.filepath))
         except Exception as e:
             print(e)
+        btn_drop.clear()
+        with btn_drop:
+            for r in list(get_b3d_local_repos()):
+                ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
+        ui.notify(_p('Refreshed'))
 
     async def choose_file():
         files = await app.native.main_window.create_file_dialog(allow_multiple=False)
@@ -38,11 +45,14 @@ def draw():
         fp = Path(State.filepath)
         card = dest_dir = None
         children = list(container.default_slot.children)
-        if len(children) == 1:
+        if len(children) == 0:
+            ui.notify(_p('No Add-on Found'), type='warning')
+            return
+        elif len(children) == 1:
             card = children[0]
             dest_dir = get_b3d_ext_dir(version='4.2').joinpath(repo, card.data.get('id'))
         if not card:
-            ui.notify(_p('No Add-on Found'), type='negative')
+            ui.notify(_p('No Add-on Found'), type='warning')
             return
         if not dest_dir.exists():
             dest_dir.mkdir(parents=True)
@@ -78,10 +88,17 @@ def draw():
         with ui.button_group().props('rounded'):
             with ui.button(icon='refresh', on_click=refresh_bl_info):
                 ui.tooltip(_p('Reload')).style('font-size: 100%')
-            with ui.button(icon='install_desktop', on_click=lambda: copy2repo('user_default')) \
+
+            with ui.button(_p('Send to'), icon='send', on_click=lambda: copy2repo(btn_drop.text)) \
                     .classes('h-12') \
-                    .props('color="primary"'):
-                ui.tooltip(_p('Send to Repo')).style('font-size: 100%')
+                    .props('color="primary"') as btn_send:
+                ui.tooltip(_p('Send to repo')).style('font-size: 100%')
+
+            with ui.dropdown_button('', auto_close=True).classes('no-cap') as btn_drop:
+                for r in repos:
+                    ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
+
+            btn_send.bind_enabled_from(btn_drop, 'text', lambda v: v != '')
             # with ui.button(icon='create_new_folder') \
             #         .classes('h-12').props('color="primary"'):
             #     ui.tooltip(_p('Pack to .zip extension')).style('font-size: 100%')
