@@ -21,7 +21,7 @@ def draw():
             ui.tab('Convert',label=_p('Convert'), icon='change_circle').props('flat color=white')
             ui.tab('Settings',label=_p('Settings'), icon='settings').props('flat color=white')
     with ui.tab_panels(tabs, value=config.data['default_tab']).classes('w-full h-full px-0 p-0').props(
-            'transition-prev=jump-up transition-next=jump-up'):
+            'transition-prev=jump-up transition-next=jump-down'):
         with ui.tab_panel('Extensions'):
             extension_view.draw()
         with ui.tab_panel('Convert'):
