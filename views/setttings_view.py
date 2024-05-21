@@ -57,7 +57,12 @@ def draw():
             with ui.row().classes('w-full items-center px-2'):
                 ui.label(_p("Default Tab"))
                 ui.space()
-                ui.select(value=config.data['default_tab'], options=['Extensions', 'Convert', 'Settings'],
+                ui.select(value=config.data['default_tab'], options={
+                    'Extensions': _p('Extensions'),
+                    'Convert': _p('Convert'),
+                    'Settings': _p('Settings')
+
+                },
                           on_change=on_change_tab)
 
         with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
