@@ -2,6 +2,8 @@ from nicegui import app, ui
 from translation import _p
 from translation import config as _t_config
 from model.config import Config
+from contextlib import contextmanager
+from typing import Callable
 
 dark = ui.dark_mode()
 config = Config()
@@ -26,7 +28,7 @@ def save_config():
     ui.notify(_p('Config saved, restart the program to take effect'), type='positive')
 
 
-def on_change_theme(v):
+def on_change_theme(v,tabs):
     theme_map = {
         False: 'white',
         True: 'dark',
@@ -35,7 +37,8 @@ def on_change_theme(v):
 
     init_theme(v.value)
     config.data['dark_mode'] = theme_map[dark.value]
-
+    value = 'white' if not dark.value else 'dark'
+    tabs.props(f'active-bg-color="{value}"')
 
 def on_change_lang(v):
     config.data['language'] = v.value
@@ -61,10 +64,10 @@ def basic_card(text: str) -> ui.element:
                 return card
 
 
-def draw():
+def draw(tabs:ui.element):
     with ui.row().classes('w-full'):
         ui.space()
-        ui.button(_p('Save'), icon='save', on_click=save_config).props('rounded')
+        ui.button(_p('Save'), icon='save', on_click=save_config).props('rounded no-caps').classes('h-12')
 
     with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
         with basic_card("Default Tab"):
@@ -78,8 +81,7 @@ def draw():
             ui.select(value=config.data['dark_mode'], options={
                 'white': _p('White'),
                 'dark': _p('Dark'),
-                'auto': _p('Auto')
-            }, on_change=on_change_theme)
+            }, on_change=lambda v: on_change_theme(v,tabs))
 
         with basic_card("Language"):
             ui.select(value=config.data['language'], options={
@@ -87,8 +89,8 @@ def draw():
                 'en_US': 'English'
             }, on_change=on_change_lang)
 
-        # with basic_card('Blender Version'):
-        #     ui.input(value=config.data['blender_version'],
-        #              on_change=on_change_blender_version) \
-        #         .classes('w-24').props(
-        #         'mask="#.#.#" hint="x.x.x" hide-bottom-space dense')
+        with basic_card('Blender Version'):
+            ui.input(value=config.data['blender_version'],
+                     on_change=on_change_blender_version) \
+                .classes('w-24').props(
+                'mask="#.#" hint="x.x" hide-bottom-space dense')

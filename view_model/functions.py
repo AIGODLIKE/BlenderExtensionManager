@@ -1,17 +1,25 @@
+import json
 from typing import Union, Optional
 from public_path import get_b3d_ext_dir
 from pathlib import Path
 from translation import _p
+from model.config import Config
 
 
-def get_b3d_local_repos(version: str = '4.2') -> Union[dict[str, Path], None]:
+def get_config_version() -> str:
+    config = Config()
+    version = config.data.get('blender_version', '4.2')
+    return version
+
+
+def get_b3d_local_repos() -> Union[dict[str, Path], None]:
     """
 
     :param version:
     :return:
         dict '{repo_name:index_file}'
     """
-    import json
+    version = get_config_version()
     d = get_b3d_ext_dir(version)
     if not d.exists(): return
 
@@ -34,7 +42,6 @@ def get_b3d_local_repos(version: str = '4.2') -> Union[dict[str, Path], None]:
 
 
 def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], None]:
-    import json
     with open(fp, mode='r', encoding='utf-8') as f:
         json_data = json.load(f)
         v = json_data.get('version')
@@ -43,8 +50,10 @@ def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], No
         return d
 
 
-def backup_repo_index(repo_name: str, version: str = '4.2') -> tuple[bool, str]:
+def backup_repo_index(repo_name: str) -> tuple[bool, str]:
     import time, shutil
+    version = get_config_version()
+
     fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
     if not fp.exists(): return (False, f'file not exists: {str(fp)}')
     backup_dir = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext_backup')
@@ -59,7 +68,9 @@ def backup_repo_index(repo_name: str, version: str = '4.2') -> tuple[bool, str]:
     return (True, f'Backup success: {str(backup_fp)}')
 
 
-def write_repo_index(repo_name: str, data_list: list[str], version: str = '4.2') -> tuple[bool, str]:
+def write_repo_index(repo_name: str, data_list: list[str]) -> tuple[bool, str]:
+    version = get_config_version()
+
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)
@@ -79,7 +90,8 @@ def write_repo_index(repo_name: str, data_list: list[str], version: str = '4.2')
     return (True, f'write success: {str(fp)}')
 
 
-def write_repo_index_with_id(repo_name: str, data: dict, version: str = '4.2') -> tuple[bool, str]:
+def write_repo_index_with_id(repo_name: str, data: dict) -> tuple[bool, str]:
+    version = get_config_version()
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)
@@ -108,8 +120,8 @@ def write_repo_index_with_id(repo_name: str, data: dict, version: str = '4.2') -
     return (True, f'write success: {str(fp)}')
 
 
-def remove_repo_index_by_id(repo_name: str, id: str, version: str = '4.2') -> tuple[bool, str]:
-    import json
+def remove_repo_index_by_id(repo_name: str, id: str) -> tuple[bool, str]:
+    version = get_config_version()
     fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
     with open(fp, 'r', encoding='utf-8') as f:
         ori_data = json.load(f)

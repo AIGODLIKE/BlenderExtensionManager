@@ -5,6 +5,7 @@ from view_model.ext_card import draw_all_cards, save_all_cards
 from translation import _p
 
 
+
 @ui.refreshable
 def draw():
     repos, set_repos = ui.state(list(get_b3d_local_repos()))
@@ -45,7 +46,7 @@ def draw():
 
         ui.space()
         with ui.button_group().props('rounded'):
-            with ui.button(icon='replay', on_click=refresh_repos).classes('h-12'):
+            with ui.button(icon='refresh', on_click=refresh_repos).classes('h-12'):
                 ui.tooltip(_p('Reload From Disk')).style('font-size: 100%')
 
             with ui.button(icon='save', on_click=lambda: save_all_cards(list_all_cards, repo)).classes('h-12'):

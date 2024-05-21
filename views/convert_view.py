@@ -86,15 +86,15 @@ def draw():
         ui.space()
 
         with ui.button_group().props('rounded'):
-            with ui.button(icon='refresh', on_click=refresh_bl_info):
+            with ui.button(icon='refresh', on_click=refresh_bl_info).classes('h-12'):
                 ui.tooltip(_p('Reload')).style('font-size: 100%')
 
             with ui.button(_p('Send to'), icon='send', on_click=lambda: copy2repo(btn_drop.text)) \
                     .classes('h-12') \
-                    .props('color="primary"') as btn_send:
+                    .props('color="primary" no-caps') as btn_send:
                 ui.tooltip(_p('Send to repo')).style('font-size: 100%')
 
-            with ui.dropdown_button('', auto_close=True).classes('no-cap') as btn_drop:
+            with ui.dropdown_button('', auto_close=True).classes('no-cap h-12') as btn_drop:
                 for r in repos:
                     ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
 
