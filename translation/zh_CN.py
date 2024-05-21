@@ -75,4 +75,5 @@ data = {
     'Tag already exists': '标签已存在',
     'At least one tag': '至少一个标签',
     'Tags updated': '标签已更新',
+    'Convert': '转换',
 }
