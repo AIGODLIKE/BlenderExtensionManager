@@ -78,4 +78,5 @@ data = {
     'Convert': '转换',
     'Select Repo': '选择存储库',
     'Send to repo': '发送到存储库',
+    'Blender Version': 'Blender版本',
 }

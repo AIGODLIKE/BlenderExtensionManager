@@ -47,39 +47,48 @@ def on_change_tab(v):
     config._save()
 
 
+def on_change_blender_version(v):
+    config.data['blender_version'] = v.value
+    config._save()
+
+
+def basic_card(text: str) -> ui.element:
+    with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
+        with ui.card().classes('w-96 gap-5 no-shadow').tight().props('bordered'):
+            with ui.row().classes('w-full items-center px-2') as card:
+                ui.label(_p(text))
+                ui.space()
+                return card
+
+
 def draw():
     with ui.row().classes('w-full'):
         ui.space()
         ui.button(_p('Save'), icon='save', on_click=save_config).props('rounded')
 
     with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
-        with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
-            with ui.row().classes('w-full items-center px-2'):
-                ui.label(_p("Default Tab"))
-                ui.space()
-                ui.select(value=config.data['default_tab'], options={
-                    'Extensions': _p('Extensions'),
-                    'Convert': _p('Convert'),
-                    'Settings': _p('Settings')
+        with basic_card("Default Tab"):
+            ui.select(value=config.data['default_tab'], options={
+                'Extensions': _p('Extensions'),
+                'Convert': _p('Convert'),
+                'Settings': _p('Settings')
+            }, on_change=on_change_tab)
 
-                },
-                          on_change=on_change_tab)
+        with basic_card("Theme"):
+            ui.select(value=config.data['dark_mode'], options={
+                'white': _p('White'),
+                'dark': _p('Dark'),
+                'auto': _p('Auto')
+            }, on_change=on_change_theme)
 
-        with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
-            with ui.row().classes('w-full items-center px-2'):
-                ui.label(_p("Theme"))
-                ui.space()
-                ui.select(value=config.data['dark_mode'], options={
-                    'white': _p('White'),
-                    'dark': _p('Dark'),
-                    'auto': _p('Auto')
-                }, on_change=on_change_theme)
+        with basic_card("Language"):
+            ui.select(value=config.data['language'], options={
+                'zh_CN': '中文',
+                'en_US': 'English'
+            }, on_change=on_change_lang)
 
-        with ui.card().classes('w-64 gap-5 no-shadow').tight().props('bordered'):
-            with ui.row().classes('w-full items-center px-2'):
-                ui.label(_p("Language"))
-                ui.space()
-                ui.select(value=config.data['language'], options={
-                    'zh_CN': '中文',
-                    'en_US': 'English'
-                }, on_change=on_change_lang)
+        # with basic_card('Blender Version'):
+        #     ui.input(value=config.data['blender_version'],
+        #              on_change=on_change_blender_version) \
+        #         .classes('w-24').props(
+        #         'mask="#.#.#" hint="x.x.x" hide-bottom-space dense')
