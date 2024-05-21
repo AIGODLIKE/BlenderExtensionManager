@@ -19,7 +19,7 @@ def draw():
         set_repo('user_default')
 
         with list_all_cards:
-            draw_all_cards(repo)
+            draw_all_cards(repo, search_field=search_field)
 
         reports = '\n'.join(new_repos)
         ui.notify(f'{_p("Reload") + " " + reports}')
@@ -27,7 +27,7 @@ def draw():
     async def search(e: events.ValueChangeEventArguments) -> None:
         list_all_cards.clear()
         with list_all_cards:
-            draw_all_cards(repo, e.value)
+            draw_all_cards(repo, search_field=e.sender)
 
     with ui.row().classes('w-full items-center'):
         with ui.select(selects, value=repo, on_change=lambda v: set_repo(v.value), label=_p('Repo')) \
@@ -52,4 +52,4 @@ def draw():
                 ui.tooltip(_p('Save All')).style('font-size: 100%')
 
         with ui.column().classes('w-full px-0 p-0') as list_all_cards:
-            draw_all_cards(repo)
+            draw_all_cards(repo, search_field=search_field)

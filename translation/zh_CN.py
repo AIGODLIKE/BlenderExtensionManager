@@ -79,4 +79,5 @@ data = {
     'Select Repo': '选择存储库',
     'Send to repo': '发送到存储库',
     'Blender Version': 'Blender版本',
+    'file error': '文件错误',
 }

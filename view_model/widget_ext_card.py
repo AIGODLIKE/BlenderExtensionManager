@@ -1,5 +1,5 @@
 from nicegui import ui
-from typing import Union, Callable
+from typing import Union, Callable, Optional
 from functools import partial
 from pathlib import Path
 
@@ -26,13 +26,14 @@ def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
 
 
 class ExtensionCard(ui.card):
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, search_field: Optional[ui.element] = None):
         super().__init__()
         self.schema = Schema(data)
         self.data = data
         self.repo_name = ''
         self.expand = False
         self.addon_path = None  # Path to the __init__.py file of the addon
+        self.search_field = search_field
 
         with self:
             self.draw()
@@ -76,10 +77,17 @@ class ExtensionCard(ui.card):
                 self.draw_header()
             self.draw_expand()
 
-    def copy_text(self, text: str):
+    def on_dbclick_copy(self, text: str):
         if isinstance(text, str):
             ui.clipboard.write(text)
             ui.notify(_p('Copied') + ' ' + text)
+
+    def on_tag_click(self, v):
+        if self.search_field:
+            if self.search_field.value == '':
+                self.search_field.value = v.sender.text
+            else:
+                self.search_field.value += '+' + v.sender.text
 
     def draw_header(self):
         with ui.row(wrap=True).classes('w-full items-center gap-2'):
@@ -97,7 +105,8 @@ class ExtensionCard(ui.card):
             ui.label(_p(self.data.get('type'))).classes('font-medium')
             with ui.row().classes('gap-0'):
                 for tag in tags:
-                    ui.chip(tag, color='primary', text_color='primary').props('outline')
+                    ui.chip(tag, color='primary', text_color='primary', on_click=self.on_tag_click) \
+                        .props('outline')
 
             with ui.button_group().props('flat'):
                 with ui.button(icon='folder',
@@ -117,12 +126,12 @@ class ExtensionCard(ui.card):
             with ui.element('q-list').props('dense bordered'):
                 # Required data
                 with ui.element('q-item').classes('items-center').props('clickable') \
-                        .on('dblclick', lambda: self.copy_text(self.data.get('id'))):
+                        .on('dblclick', lambda: self.on_dbclick_copy(self.data.get('id'))):
                     ui.label('ID')
                     ui.space()
                     ui.label(self.data.get('id')).classes('font-semibold')
                 with ui.element('q-item').classes('items-center').props('clickable') \
-                        .on('dblclick', lambda: self.copy_text(self.data.get('maintainer'))):
+                        .on('dblclick', lambda: self.on_dbclick_copy(self.data.get('maintainer'))):
                     ui.label(_p('maintainer').title())
                     ui.space()
                     ui.label(self.data.get('maintainer'))
@@ -135,7 +144,7 @@ class ExtensionCard(ui.card):
                         continue
                     else:
                         with ui.element('q-item').classes('w-full items-center').props('clickable') \
-                                .on('dblclick', lambda: self.copy_text(self.data.get(k))):
+                                .on('dblclick', lambda: self.on_dbclick_copy(self.data.get(k))):
                             ui.label(_p(k))
                             ui.space()
                             ui.label(v)
