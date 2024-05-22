@@ -4,7 +4,7 @@ This is a native app which allow you to install, update and remove Blender exten
 
 # Download
 
-[Download the latest build](PLACEHOLDER_FOR_DOWNLOAD_LINK)
+[Download the latest build](https://github.com/atticus-lv/BlenderExtensionManager/suites/9187149310/artifacts/1525864581 1525826915 1525768649 1525734537)
 
 # Feature
 
