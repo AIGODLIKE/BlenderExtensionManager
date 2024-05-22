@@ -3,9 +3,11 @@ import json
 import sys
 from pathlib import Path
 from typing import Union
+from model.config import Config
 
-
-def get_b3d_ext_dir(version: str = '4.2') -> Path:
+def get_b3d_ext_dir() -> Path:
+    config = Config()
+    version = config.data.get('blender_version','4.2')
     return Path.home().joinpath('AppData', 'Roaming', 'Blender Foundation', 'Blender', version, 'extensions')
 
 

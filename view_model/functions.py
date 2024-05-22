@@ -19,8 +19,7 @@ def get_b3d_local_repos() -> Union[dict[str, Path], None]:
     :return:
         dict '{repo_name:index_file}'
     """
-    version = get_config_version()
-    d = get_b3d_ext_dir(version)
+    d = get_b3d_ext_dir()
     if not d.exists(): return
 
     repo_index_file = dict()
@@ -52,9 +51,8 @@ def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], No
 
 def backup_repo_index(repo_name: str) -> tuple[bool, str]:
     import time, shutil
-    version = get_config_version()
 
-    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
+    fp = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext', 'index.json')
     if not fp.exists(): return (False, f'file not exists: {str(fp)}')
     backup_dir = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext_backup')
     if not backup_dir.exists():
@@ -69,14 +67,13 @@ def backup_repo_index(repo_name: str) -> tuple[bool, str]:
 
 
 def write_repo_index(repo_name: str, data_list: list[str]) -> tuple[bool, str]:
-    version = get_config_version()
 
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)
 
     import json
-    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
+    fp = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext', 'index.json')
     with open(fp, 'r', encoding='utf-8') as f:
         ori_data = json.load(f)
     ori_data['data'] = data_list
@@ -91,13 +88,12 @@ def write_repo_index(repo_name: str, data_list: list[str]) -> tuple[bool, str]:
 
 
 def write_repo_index_with_id(repo_name: str, data: dict) -> tuple[bool, str]:
-    version = get_config_version()
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)
 
     import json
-    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
+    fp = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext', 'index.json')
     with open(fp, 'r', encoding='utf-8') as f:
         ori_data = json.load(f)
 
@@ -121,8 +117,7 @@ def write_repo_index_with_id(repo_name: str, data: dict) -> tuple[bool, str]:
 
 
 def remove_repo_index_by_id(repo_name: str, id: str) -> tuple[bool, str]:
-    version = get_config_version()
-    fp = get_b3d_ext_dir(version).joinpath(repo_name, '.blender_ext', 'index.json')
+    fp = get_b3d_ext_dir().joinpath(repo_name, '.blender_ext', 'index.json')
     with open(fp, 'r', encoding='utf-8') as f:
         ori_data = json.load(f)
     data_list: list = ori_data.get('data')

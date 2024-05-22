@@ -58,7 +58,7 @@ def draw():
             return
         elif len(children) == 1:
             card = children[0]
-            dest_dir = get_b3d_ext_dir(version='4.2').joinpath(repo, card.data.get('id'))
+            dest_dir = get_b3d_ext_dir().joinpath(repo, card.data.get('id'))
         if not card:
             ui.notify(_p('No Add-on Found'), type='warning')
             return
