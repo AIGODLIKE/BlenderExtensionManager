@@ -49,7 +49,7 @@ jobs:
     - name: Update README
       shell: bash
       run: |
-        DOWNLOAD_URL=${{ steps.get-download-url.outputs.download_url }}
+        DOWNLOAD_URL="${{ steps.get-download-url.outputs.download_url }}"
         sed -i "s|PLACEHOLDER_FOR_DOWNLOAD_LINK|${DOWNLOAD_URL}|" README.md
 
     # Commit README changes
