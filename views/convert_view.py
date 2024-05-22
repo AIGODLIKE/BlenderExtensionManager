@@ -16,7 +16,11 @@ class State():
 
 @ui.refreshable
 def draw():
-    repos = list(get_b3d_local_repos())
+    res = get_b3d_local_repos()
+    if not res:
+        ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+        return
+    repos = list(res)
 
     async def refresh_bl_info():
         try:
@@ -26,8 +30,12 @@ def draw():
         except Exception as e:
             print(e)
         btn_drop.clear()
+        res = get_b3d_local_repos()
+        if not res:
+            ui.notify(_p('No local repo or local repo not init by blender'))
+            return
         with btn_drop:
-            for r in list(get_b3d_local_repos()):
+            for r in list():
                 ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
         ui.notify(_p('Refreshed'))
 
