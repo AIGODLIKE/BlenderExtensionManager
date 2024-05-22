@@ -4,9 +4,8 @@ from pathlib import Path
 import asyncio
 
 from view_model.bl_info_card import draw_bl_info_card
-from view_model.functions import write_repo_index_with_id, get_b3d_local_repos
+from view_model.functions import write_repo_index_with_id, get_b3d_local_repos, get_b3d_ext_dir
 from translation import _p
-from public_path import get_b3d_ext_dir
 from model.schema import Schema
 
 
@@ -16,12 +15,6 @@ class State():
 
 @ui.refreshable
 def draw():
-    res = get_b3d_local_repos()
-    if not res:
-        ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
-        return
-    repos = list(res)
-
     async def refresh_bl_info():
         try:
             container.clear()
@@ -30,12 +23,12 @@ def draw():
         except Exception as e:
             print(e)
         btn_drop.clear()
-        res = get_b3d_local_repos()
+        res, repos = get_b3d_local_repos()
         if not res:
-            ui.notify(_p('No local repo or local repo not init by blender'))
+            ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
             return
         with btn_drop:
-            for r in list():
+            for r in list(repos):
                 ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
         ui.notify(_p('Refreshed'))
 
@@ -103,9 +96,13 @@ def draw():
                 ui.tooltip(_p('Send to repo')).style('font-size: 100%')
 
             with ui.dropdown_button('', auto_close=True).classes('no-cap h-12') as btn_drop:
-                for r in repos:
-                    ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
-
+                res, repos = get_b3d_local_repos()
+                if res:
+                    repos = list(repos)
+                    for r in repos:
+                        ui.item(r, on_click=lambda v=r: btn_drop.set_text(r))
+                else:
+                    ui.item(_p('No local repo or local repo not init by blender')).style('color:red')
             btn_send.bind_enabled_from(btn_drop, 'text', lambda v: v != '')
             # with ui.button(icon='create_new_folder') \
             #         .classes('h-12').props('color="primary"'):

@@ -18,12 +18,12 @@ def draw():
     def refresh_repos():
         list_all_cards.clear()
 
-        res = get_b3d_local_repos()
+        res,new_repos = get_b3d_local_repos()
         if not res:
-            ui.notify(_p('No local repo or local repo not init by blender'))
+            ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
             return
 
-        new_repos = list(res)
+        new_repos = list(new_repos)
         set_repos(new_repos)
         set_repo('user_default')
 

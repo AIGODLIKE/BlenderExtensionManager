@@ -1,26 +1,28 @@
 import json
-from typing import Union, Optional
-from public_path import get_b3d_ext_dir
+from typing import Union, Optional, Callable
 from pathlib import Path
 from translation import _p
+from nicegui import ui
 from model.config import Config
 
 
-def get_config_version() -> str:
+def get_b3d_ext_dir() -> Path:
     config = Config()
     version = config.data.get('blender_version', '4.2')
-    return version
+    return Path.home().joinpath('AppData', 'Roaming', 'Blender Foundation', 'Blender', version, 'extensions')
 
 
-def get_b3d_local_repos() -> Union[dict[str, Path], None]:
+def get_b3d_local_repos() -> tuple[bool, Union[dict[str, Path], None]]:
     """
 
     :param version:
     :return:
-        dict '{repo_name:index_file}'
+        bool: True if success
+        ui.element or dict '{repo_name:index_file}'
     """
     d = get_b3d_ext_dir()
-    if not d.exists(): return
+    if not d.exists():
+        return False, None
 
     repo_index_file = dict()
 
@@ -37,7 +39,7 @@ def get_b3d_local_repos() -> Union[dict[str, Path], None]:
         if is_local_repo:
             repo_index_file[directory.name] = directory.joinpath('.blender_ext', 'index.json')
 
-    return repo_index_file
+    return True, repo_index_file
 
 
 def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], None]:
@@ -67,7 +69,6 @@ def backup_repo_index(repo_name: str) -> tuple[bool, str]:
 
 
 def write_repo_index(repo_name: str, data_list: list[str]) -> tuple[bool, str]:
-
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)

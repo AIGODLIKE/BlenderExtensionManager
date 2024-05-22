@@ -10,11 +10,11 @@ from translation import _p
 
 
 def draw_all_cards(repo: str, search_field: Optional[ui.element] = None):
-    name_index = get_b3d_local_repos()
-    if not name_index:
+    res, repos = get_b3d_local_repos()
+    if not res:
         ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
         return
-    index_file = name_index.get(repo, None)
+    index_file = repos.get(repo, None)
     datas = parse_repo_index_file(index_file)
 
     if isinstance(datas, type(None)):

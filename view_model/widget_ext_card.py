@@ -3,11 +3,10 @@ from typing import Union, Callable, Optional
 from functools import partial
 from pathlib import Path
 
-from public_path import get_b3d_ext_dir
 from model.schema import Schema, ExtensionsOptional
 from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
-from view_model.functions import remove_repo_index_by_id
+from view_model.functions import remove_repo_index_by_id,get_b3d_ext_dir
 
 
 def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
