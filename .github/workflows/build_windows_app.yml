@@ -50,7 +50,7 @@ jobs:
       shell: bash
       run: |
         DOWNLOAD_URL=${{ steps.get-download-url.outputs.download_url }}
-        sed -i "s|BlenderExtensionManager_win|${DOWNLOAD_URL}|" README.md
+        sed -i "s|PLACEHOLDER_FOR_DOWNLOAD_LINK|${DOWNLOAD_URL}|" README.md
 
     # Commit README changes
     - name: Commit README changes
