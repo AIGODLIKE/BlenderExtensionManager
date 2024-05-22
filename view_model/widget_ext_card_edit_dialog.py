@@ -68,6 +68,9 @@ class CardEditDialog(ui.dialog):
         elif len(new_tags) == 0:
             ui.notify(_p('At least one tag'))
             return
+        if new_tags == tags:
+            ui.notify(_p('No change'),type='warning')
+            return
         setattr(self.scheme, attr, new_tags)
         tag_row.clear()
         with tag_row:

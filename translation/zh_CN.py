@@ -80,4 +80,5 @@ data = {
     'Send to repo': '发送到存储库',
     'Blender Version': 'Blender版本',
     'file error': '文件错误',
+    'No change': '无变化',
 }
