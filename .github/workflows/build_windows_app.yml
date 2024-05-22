@@ -21,4 +21,30 @@ jobs:
     # Optionally verify that it works (provided that it does not need user interaction)
     - uses: actions/upload-artifact@v2
       with:
+        name: BlenderExtensionManager_win
         path: dist/*
+
+    # Get the artifact download URL
+    - name: Get Artifact Download URL
+      id: get-download-url
+      run: |
+        ARTIFACT_ID=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/actions/artifacts | jq -r ".artifacts[] | select(.name==\"BlenderExtensionManager_win\") | .id")
+        DOWNLOAD_URL="https://github.com/${{ github.repository }}/suites/${{ github.run_id }}/artifacts/$ARTIFACT_ID"
+        echo "::set-output name=download_url::$DOWNLOAD_URL"
+
+    # Update README with the artifact download link
+    - name: Update README
+      run: |
+        DOWNLOAD_URL=${{ steps.get-download-url.outputs.download_url }}
+        sed -i "s|Download link:.*|Download link: [BlenderExtensionManager_win](${DOWNLOAD_URL})|" README.md
+
+    # Commit README changes
+    - name: Commit README changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add README.md
+        git commit -m 'Update download link in README'
+        git push

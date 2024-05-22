@@ -4,8 +4,7 @@ This is a native app which allow you to install, update and remove Blender exten
 
 # Download
 
-TODO
-1. add build test
+Download link: [BlenderExtensionManager_win](PLACEHOLDER_FOR_DOWNLOAD_LINK)
 
 # Feature
 
