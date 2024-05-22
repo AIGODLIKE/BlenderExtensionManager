@@ -36,15 +36,15 @@ jobs:
       id: get-download-url
       shell: pwsh
       run: |
-        $token = "${{ secrets.GITHUB_TOKEN }}"
-        $headers = @{ Authorization = "token $token"; Accept = "application/vnd.github.v3+json" }
+        $headers = @{
+          Accept = "application/vnd.github.v3+json"
+        }
         $repo = "${{ github.repository }}"
-        $artifacts = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/actions/artifacts" -Headers $headers
-        $artifact = $artifacts.artifacts | Where-Object { $_.name -eq "BlenderExtensionManager_win" }
+        $response = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/actions/artifacts" -Headers $headers
+        $artifact = $response.artifacts | Where-Object { $_.name -eq "BlenderExtensionManager_win" } | Select-Object -First 1
         $artifact_id = $artifact.id
-        $download_url = "https://github.com/$repo/suites/${{ github.run_id }}/artifacts/$artifact_id"
+        $download_url = "https://github.com/$repo/actions/runs/${{ github.run_id }}/artifacts/$artifact_id"
         Write-Output "::set-output name=download_url::$download_url"
-
     # Update README with the artifact download link
     - name: Update README
       shell: bash
