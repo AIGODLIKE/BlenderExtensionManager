@@ -1,9 +1,15 @@
 on:
   push:
     branches: [ "github_action_test" ]
+    paths-ignore:
+      - 'README.md'  # 忽略对README.md的更改
+
 
 jobs:
+  permissions:
+    contents: write
   build:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
