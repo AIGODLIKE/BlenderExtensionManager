@@ -33,9 +33,9 @@ def draw():
             'transition-prev=jump-up transition-next=jump-down'):
         with ui.tab_panel('Extensions').classes('w-full h-full px-0 p-0'):
             with ui.tab_panels(ext_tabs, value='Manage').classes('w-full h-full px-0 p-0'):
-                with ui.tab_panel('Manage').classes('w-full h-full px-2 p-0'):
+                with ui.tab_panel('Manage').classes('w-full h-full px-2 p-2'):
                     extension_view.draw()
-                with ui.tab_panel('Convert').classes('w-full h-full px-2 p-0'):
+                with ui.tab_panel('Convert').classes('w-full h-full px-2 p-2'):
                     convert_view.draw()
         with ui.tab_panel('Settings'):
             setttings_view.draw(tabs)
