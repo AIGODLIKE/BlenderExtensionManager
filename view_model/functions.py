@@ -38,7 +38,7 @@ def get_b3d_local_repos() -> tuple[bool, Union[dict[str, Path], None, str]]:
                     ext_list = data.get('data', [])
                     if len(ext_list) == 0: is_local_repo = True
             except FileNotFoundError:
-                return False, None
+                is_local_repo = True
             except Exception as e:
                 return False, str(e)
         if is_local_repo:

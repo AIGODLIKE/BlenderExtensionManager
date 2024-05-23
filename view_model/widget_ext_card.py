@@ -27,7 +27,7 @@ def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
 
 
 class ExtensionCard(ui.card):
-    def __init__(self, data: dict, search_field: Optional[ui.element] = None):
+    def __init__(self, data: dict, search_field: Optional[ui.input] = None):
         super().__init__()
         self.schema = Schema(data)
         self.data = data
@@ -153,7 +153,8 @@ class ExtensionCard(ui.card):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
-                with ui.button(icon='archive', on_click=lambda: self.build_zip()).props('round flat'):
+                with ui.button(icon='archive', on_click=lambda: self.build_zip()).props('round flat') \
+                        .bind_visibility_from(self, 'addon_path', lambda v: not v):
                     ui.tooltip(_p('Build Zip')).style('font-size: 100%')
 
                 ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"') \

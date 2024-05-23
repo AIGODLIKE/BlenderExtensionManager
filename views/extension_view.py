@@ -7,20 +7,23 @@ from translation import _p
 
 @ui.refreshable
 def draw():
-    res = get_b3d_local_repos()
+    res,new_repos = get_b3d_local_repos()
+    warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+    warning.set_visibility(False)
     if not res:
-        ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
-        return
-    repos, set_repos = ui.state(list(res))
+        warning.set_visibility(True)
+        new_repos = {}
+
+    repos, set_repos = ui.state(list(new_repos))
     repo, set_repo = ui.state('user_default')
     selects: dict = {repo: repo for repo in repos}
 
     def refresh_repos():
         list_all_cards.clear()
 
-        res,new_repos = get_b3d_local_repos()
+        res, new_repos = get_b3d_local_repos()
         if not res:
-            ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+            warning.set_visibility(True)
             return
 
         new_repos = list(new_repos)
