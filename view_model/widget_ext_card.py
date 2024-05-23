@@ -1,12 +1,14 @@
-from nicegui import ui
+from nicegui import ui, app
 from typing import Union, Callable, Optional
 from functools import partial
 from pathlib import Path
+import asyncio
+import os
 
 from model.schema import Schema, ExtensionsOptional
 from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
-from view_model.functions import remove_repo_index_by_id,get_b3d_ext_dir
+from view_model.functions import remove_repo_index_by_id, get_b3d_ext_dir
 
 
 def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
@@ -25,7 +27,7 @@ def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
 
 
 class ExtensionCard(ui.card):
-    def __init__(self, data: dict, search_field: Optional[ui.element] = None):
+    def __init__(self, data: dict, search_field: Optional[ui.input] = None):
         super().__init__()
         self.schema = Schema(data)
         self.data = data
@@ -88,6 +90,40 @@ class ExtensionCard(ui.card):
             else:
                 self.search_field.value += '+' + v.sender.text
 
+    async def build_zip(self):
+        from webview import SAVE_DIALOG
+        from view_model.functions import zip_dir
+        save_path = await  app.native.main_window.create_file_dialog(save_filename=f'{self.data.get("name")}.zip',
+                                                                     dialog_type=SAVE_DIALOG,
+                                                                     directory='/')
+        if not save_path: return
+        fp = Path(save_path)
+        if fp.exists():
+            try:
+                fp.unlink()
+            except:
+                ui.notify(_p('File exists and cannot be deleted'), type='negative')
+                return
+
+        if self.addon_path:
+            tg_dir = self.addon_path
+            n = ui.notification(message=_p('Building Zip...'), spinner=True, type='ongoing', timeout=None)
+            Schema.write_toml(directory=self.addon_path, data=self.data)
+            res, msg = zip_dir(tg_dir, fp)
+            n.spinner = False
+            if res:
+                n.message = _p('Done')
+                n.type = 'positive'
+                n.icon = 'done'
+            else:
+                n.message = _p('Failed') + f': {msg}'
+                n.multi_line = True
+                n.type = 'negative'
+                n.icon = 'error'
+            n.spinner = False
+            await asyncio.sleep(2)
+            n.dismiss()
+
     def draw_header(self):
         with ui.row(wrap=True).classes('w-full items-center gap-2'):
             is_valid, msg = Schema.is_valid(self.data)
@@ -117,6 +153,10 @@ class ExtensionCard(ui.card):
                     ui.tooltip(_p('Open Directory')).style('font-size: 100%')
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
+                with ui.button(icon='archive', on_click=lambda: self.build_zip()).props('round flat') \
+                        .bind_visibility_from(self, 'addon_path', lambda v: not v):
+                    ui.tooltip(_p('Build Zip')).style('font-size: 100%')
+
                 ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"') \
                     .bind_visibility_from(self, 'addon_path', lambda v: not v)
 

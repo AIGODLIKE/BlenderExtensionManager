@@ -9,23 +9,22 @@ from view_model.functions import parse_repo_index_file, get_b3d_local_repos, wri
 from translation import _p
 
 
-def draw_all_cards(repo: str, search_field: Optional[ui.element] = None):
+def draw_all_cards(repo: str, search_field: Optional[ui.input] = None):
     res, repos = get_b3d_local_repos()
     if not res:
-        ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
         return
     index_file = repos.get(repo, None)
     datas = parse_repo_index_file(index_file)
 
     if isinstance(datas, type(None)):
-        ui.label(f'{repo}:{index_file} {_p("is empty")}').style('color:red')
+        ui.label(f'{repo} {index_file}: {_p("is empty")}').style('color:red')
         return
     elif len(datas) == 0:
-        ui.label(f'{repo}:{index_file} {_p("is empty")}').style('color:red')
+        ui.label(f'{repo} {_p("is empty")}: {index_file}').classes('text-grey-6')
         return
 
     if not isinstance(datas[0], dict):
-        ui.label(f'{repo}:{index_file} {_p("file error")}').style('color:red')
+        ui.label(f'{repo} {_p("file error")}: {index_file}').style('color:red')
         return
 
     if not search_field:

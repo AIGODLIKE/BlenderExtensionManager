@@ -38,7 +38,7 @@ def get_b3d_local_repos() -> tuple[bool, Union[dict[str, Path], None, str]]:
                     ext_list = data.get('data', [])
                     if len(ext_list) == 0: is_local_repo = True
             except FileNotFoundError:
-                return False, None
+                is_local_repo = True
             except Exception as e:
                 return False, str(e)
         if is_local_repo:
@@ -138,3 +138,26 @@ def remove_repo_index_by_id(repo_name: str, id: str) -> tuple[bool, str]:
         return (False, f'write failed: {str(fp)}')
 
     return (True, f'write success: {str(fp)}')
+
+
+def zip_dir(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]:
+    """
+    :param zip_dir:
+    :param dest_zip_path:
+    :return:
+        bool: success
+        str: dest_zip_path/err_msg
+    """
+    import shutil, os
+    import zipfile
+    try:
+        with zipfile.ZipFile(dest_zip_path, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
+            for root, dirs, files in os.walk(zip_dir):
+                for file in files:
+                    full_path = os.path.join(root, file)
+                    if os.path.isdir(full_path) and (file.startswith('.') or file.startswith('__')): continue
+                    zip.write(os.path.join(root, file),
+                              arcname=os.path.join(root, file).replace(str(zip_dir), ''))
+        return True, f'{dest_zip_path}'
+    except Exception as e:
+        return False, str(e)

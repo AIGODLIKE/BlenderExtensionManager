@@ -83,6 +83,11 @@ data = {
     'No change': '无变化',
     'No local repo or local repo not init by blender': '没有本地存储库或本地存储库未由Blender初始化',
     'Verify All': '验证全部',
-    'Manage Repo Extensions':'管理储存库扩展',
-    'Convert Addon to Extension':'转换插件为扩展'
-}
+    'Manage Repo Extensions': '管理储存库扩展',
+    'Convert Addon to Extension': '转换插件为扩展',
+    'Invalid Blender': '无效的Blender',
+    'Blender verified:': 'Blender已验证：',
+    'File exists and cannot be deleted': '文件存在且无法删除',
+    'Zip file saved': 'Zip文件已保存',
+    'Build Zip': '打包Zip',
+    'Done': '完成',
