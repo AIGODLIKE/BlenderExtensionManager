@@ -25,7 +25,9 @@ def draw():
         btn_drop.clear()
         res, repos = get_b3d_local_repos()
         if not res:
-            ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+            warning.clear()
+            with  warning:
+                ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
             return
         with btn_drop:
             for r in list(repos):
@@ -107,6 +109,7 @@ def draw():
             # with ui.button(icon='create_new_folder') \
             #         .classes('h-12').props('color="primary"'):
             #     ui.tooltip(_p('Pack to .zip extension')).style('font-size: 100%')
-
+    with ui.row() as warning:
+        pass
     with ui.column().classes('w-full') as container:
         draw_bl_info_card(Path(State.filepath))
