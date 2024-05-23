@@ -91,4 +91,3 @@ data = {
     'Zip file saved': 'Zip文件已保存',
     'Build Zip': '打包Zip',
     'Done': '完成',
-}
