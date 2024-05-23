@@ -15,22 +15,28 @@ def draw():
                 f'vertical swipeable active-bg-color="{bg_color}" active-color="primary" indicator-color="transparent"') \
                     .style('margin-top:150px') as tabs:
                 ui.tab('Extensions', label=_p('Extensions'), icon='extension').props('flat color=white no-caps')
-                ui.tab('Convert', label=_p('Convert'), icon='change_circle').props('flat color=white no-caps')
                 ui.tab('Settings', label=_p('Settings'), icon='settings').props('flat color=white no-caps')
             ui.button(icon='help', on_click=lambda: ui.notify('TODO')).props('flat color="white" dense rounded')
 
     with ui.element('q-toolbar').classes('items-center pywebview-drag-region h-12'):
         with ui.row().classes('w-full items-center px-0 p-0'):
             ui.button(icon='menu_open', on_click=lambda: left_drawer.toggle()).props('flat color="primary" dense')
+            with ui.tabs().classes('text-grey-6 ').props(
+                    'active-color="primary" no-caps dense inline-label indicator-color="primary" narrow-indicator') \
+                    .bind_visibility_from(tabs, 'value', lambda v: v == 'Extensions') as ext_tabs:
+                ui.tab('Manage', icon='extension', label=_p('Manage Repo Extensions'))
+                ui.tab('Convert', icon='change_circle', label=_p('Convert Addon to Extension'))
             ui.space()
             ui.button(on_click=app.shutdown, icon='close').props('flat color="red" dense')
 
     with ui.tab_panels(tabs, value=default_tab).classes('w-full h-full px-0 p-0').props(
             'transition-prev=jump-up transition-next=jump-down'):
-        with ui.tab_panel('Extensions'):
-            extension_view.draw()
-        with ui.tab_panel('Convert'):
-            convert_view.draw()
+        with ui.tab_panel('Extensions').classes('w-full h-full px-0 p-0'):
+            with ui.tab_panels(ext_tabs, value='Manage').classes('w-full h-full px-0 p-0'):
+                with ui.tab_panel('Manage').classes('w-full h-full px-2 p-0'):
+                    extension_view.draw()
+                with ui.tab_panel('Convert').classes('w-full h-full px-2 p-0'):
+                    convert_view.draw()
         with ui.tab_panel('Settings'):
             setttings_view.draw(tabs)
 
