@@ -1,10 +1,9 @@
 on:
   push:
+    tags:
+      - 'v**'
     branches: [ "master" ]
-    paths-ignore:
-      - 'README.md'
-      - 'doc/*'
-      - 'doc'
+
   # tag
   release:
       types: [created]
