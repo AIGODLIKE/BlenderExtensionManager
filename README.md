@@ -8,15 +8,17 @@ TODO
 
 # Feature
 
-+ Extension manage(Local repo)
+## Extension
++ Manage(Local repo)
     1. select one repo
     2. edit / remove extension
     3. search
 + Convert addon to extension
     1. select .py/ folder addon
     2. make it an extension
-    3. edit and send to repo
-+ Edit extension
+    3. edit and send to repo (no-english recommand)
+    4. make it a zip as extension
++ Edit
     + edit extension info
     + edit extension tags
 
