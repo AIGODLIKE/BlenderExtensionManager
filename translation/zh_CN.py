@@ -82,4 +82,7 @@ data = {
     'file error': '文件错误',
     'No change': '无变化',
     'No local repo or local repo not init by blender': '没有本地存储库或本地存储库未由Blender初始化',
+    'Verify All': '验证全部',
+    'Manage Repo Extensions':'管理储存库扩展',
+    'Convert Addon to Extension':'转换插件为扩展'
 }
