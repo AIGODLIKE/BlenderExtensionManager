@@ -87,4 +87,8 @@ data = {
     'Convert Addon to Extension': '转换插件为扩展',
     'Invalid Blender': '无效的Blender',
     'Blender verified:': 'Blender已验证：',
+    'File exists and cannot be deleted': '文件存在且无法删除',
+    'Zip file saved': 'Zip文件已保存',
+    'Build Zip': '打包Zip',
+    'Done': '完成',
 }
