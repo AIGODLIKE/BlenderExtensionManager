@@ -63,6 +63,6 @@ def draw():
             with ui.button(icon='save', on_click=lambda: save_all_cards(list_all_cards, repo)).classes('h-12'):
                 ui.tooltip(_p('Save All')).style('font-size: 100%')
 
-        # with ui.column().classes('w-full px-0 p-0') as list_all_cards:
-        with ui.element('q-intersection').classes('w-full justify-center').props('transition="scale"') as list_all_cards:
+        with ui.column().classes('w-full px-0 p-0') as list_all_cards:
+        # with ui.row().classes('w-full justify-center') as list_all_cards:
             draw_all_cards(repo, search_field=search_field)

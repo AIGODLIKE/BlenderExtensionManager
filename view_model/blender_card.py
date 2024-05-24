@@ -36,7 +36,8 @@ async def verify_blender(container):
         n.type = 'negative'
 
     with container:
-        blender_card(b3d)
+        with ui.element('q-intersection').props('transition="scale"'):
+            blender_card(b3d)
 
     await asyncio.sleep(1)
 
@@ -83,4 +84,9 @@ def draw_all_b3d_cards():
 
 
 draw_all_b3d_cards()
+
+
+# qfile = ui.element('q-file').props('filled label="Drop File Here"')
+# qfile.on('update:modelValue', lambda e: print(f"File: '{e.args}'"))
+
 ui.run(native=True)
