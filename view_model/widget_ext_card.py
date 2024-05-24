@@ -92,7 +92,7 @@ class ExtensionCard(ui.card):
 
     async def build_zip(self):
         from webview import SAVE_DIALOG
-        from view_model.functions import zip_dir
+        from view_model.functions import build_addon_zip_file
         save_path = await  app.native.main_window.create_file_dialog(save_filename=f'{self.data.get("name")}.zip',
                                                                      dialog_type=SAVE_DIALOG,
                                                                      directory='/')
@@ -106,10 +106,13 @@ class ExtensionCard(ui.card):
                 return
 
         if self.addon_path:
+            if fp.parent.resolve() == self.addon_path:
+                ui.notify(_p('Cannot save inside source add-on folder'), type='warning',close_button='OK')
+                return
             tg_dir = self.addon_path
             n = ui.notification(message=_p('Building Zip...'), spinner=True, type='ongoing', timeout=None)
             Schema.write_toml(directory=self.addon_path, data=self.data)
-            res, msg = zip_dir(tg_dir, fp)
+            res, msg = build_addon_zip_file(tg_dir, fp)
             n.spinner = False
             if res:
                 n.message = _p('Done')
@@ -121,8 +124,9 @@ class ExtensionCard(ui.card):
                 n.type = 'negative'
                 n.icon = 'error'
             n.spinner = False
-            await asyncio.sleep(2)
-            n.dismiss()
+            if res:
+                await asyncio.sleep(2)
+                n.dismiss()
 
     def draw_header(self):
         with ui.row(wrap=True).classes('w-full items-center gap-2'):

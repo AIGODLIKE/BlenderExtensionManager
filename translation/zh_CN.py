@@ -41,6 +41,7 @@ data = {
     'Choose File': '选择文件',
     'Selected': '已选择',
     'Select a .py file': '选择一个.py文件',
+    'Select addon folder': '选择一个插件文件夹',
     'No Add-on Found': '未找到插件',
     'Install Failed': '安装失败',
     'Install Success': '安装成功',
@@ -91,4 +92,6 @@ data = {
     'Zip file saved': 'Zip文件已保存',
     'Build Zip': '打包Zip',
     'Done': '完成',
+    'Cannot save inside source add-on folder': '无法保存在来源插件文件夹内',
+    '__init__.py not found': '未找到__init__.py',
 }

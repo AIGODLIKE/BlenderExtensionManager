@@ -140,7 +140,7 @@ def remove_repo_index_by_id(repo_name: str, id: str) -> tuple[bool, str]:
     return (True, f'write success: {str(fp)}')
 
 
-def zip_dir(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]:
+def build_addon_zip_file(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]:
     """
     :param zip_dir:
     :param dest_zip_path:
@@ -150,14 +150,35 @@ def zip_dir(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]:
     """
     import shutil, os
     import zipfile
+
+    def prepare_files():
+        temp_dir = dest_zip_path.parent.joinpath('BME_TMP_ZIP')
+        sub_dir = temp_dir.joinpath(dest_zip_path.stem)
+        if sub_dir.exists():
+            shutil.rmtree(sub_dir)
+        sub_dir.mkdir(parents=True)
+
+        for file in zip_dir.glob('*'):
+            if file.is_dir():
+                if file.name.startswith('__') or file.name.startswith('.'): continue
+                shutil.copytree(file, sub_dir.joinpath(file.name))
+
+            elif file.is_file():
+                if file.name == __file__: continue
+
+                shutil.copy(file, sub_dir.joinpath(file.name))
+
+        return temp_dir
+
     try:
+        temp_dir = prepare_files()
         with zipfile.ZipFile(dest_zip_path, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
-            for root, dirs, files in os.walk(zip_dir):
+            for root, dirs, files in os.walk(temp_dir):
                 for file in files:
-                    full_path = os.path.join(root, file)
-                    if os.path.isdir(full_path) and (file.startswith('.') or file.startswith('__')): continue
                     zip.write(os.path.join(root, file),
-                              arcname=os.path.join(root, file).replace(str(zip_dir), ''))
+                              arcname=os.path.join(root, file).replace(str(temp_dir), ''))
+        shutil.rmtree(temp_dir)
+
         return True, f'{dest_zip_path}'
     except Exception as e:
         return False, str(e)
