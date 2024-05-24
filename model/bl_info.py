@@ -14,7 +14,6 @@ from .schema import Schema
     "doc_url": "",
     "url":"",
     "category": "Add Mesh",
-
 """
 
 
@@ -31,6 +30,12 @@ class Bl_info:
     url: Optional[str]
 
     def setup(self, path: Path) -> tuple[bool, Union[dict, str]]:
+        """setup the bl_info from the __init__.py file of the addon
+        :param
+            path (Path): The path/directory to the __init__.py file of the addon
+        :return
+            (bool, Union[dict, str]) - (True, bl_info) if bl_info is found, else (False, 'bl_info not found')
+        """
         self.path = path
         res, data = self.get_bl_addon_info(path)
         if not res: return (res, data)
@@ -41,6 +46,7 @@ class Bl_info:
 
     @staticmethod
     def version_fix(v: tuple) -> str:
+        """fix version to fit the schema version format"""
         if len(v) == 2:
             v = (*v, 0)
         return '.'.join(map(str, v))
@@ -52,9 +58,13 @@ class Bl_info:
 
     @property
     def fix_blender_version(self) -> str:
+        """schema version must be 3 digits, so we need to fix it here."""
         return self.version_fix(self.blender)
 
     def to_schema_data(self) -> dict:
+        """convert the bl_info to schema valid data
+        :return: dict
+        """
         if self.path.name == '__init__.py':
             ID = self.path.parent.name
         else:

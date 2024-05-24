@@ -59,6 +59,11 @@ class Schema():
                 setattr(self, k, v)
 
     def to_dict(self) -> dict:
+        """
+        convert to dict
+        :return:
+            dict: data
+        """
         data = {}
         for k, v in self.__annotations__.items():
             data[k] = getattr(self, k)
@@ -70,7 +75,7 @@ class Schema():
 
     @staticmethod
     def search_list(data: dict) -> list:
-        # remove
+        """generate a list for search"""
         new_data = data
         keys = ['id', 'name', 'tagline', 'maintainer']
         for k in keys:
@@ -81,7 +86,13 @@ class Schema():
 
     @staticmethod
     def write_toml(data: dict, directory: Path) -> bool:
-        'write_to a blender_manifest.toml file'
+        """
+        write_to a blender_manifest.toml file
+        :param data:
+        :param directory:
+        :return:
+            bool:success
+        """
         try:
             with open(directory.joinpath('blender_manifest.toml'), 'w', encoding='utf-8') as f:
                 for k, v in data.items():
@@ -104,7 +115,7 @@ class Schema():
 
     @staticmethod
     def load_toml(directory: Path) -> dict:
-        # toml
+        """load from a blender_manifest.toml file"""
         import tomllib
         toml_str = tomllib
         with open(directory.joinpath('blender_manifest.toml'), 'r', encoding='utf-8') as f:
@@ -114,7 +125,11 @@ class Schema():
 
     @staticmethod
     def is_valid(data: dict) -> tuple[bool, str]:
-        """check if the data is valid"""
+        """check if the data is valid
+        :return:
+            bool: success
+            str: msg
+        """
         for k in Schema.__annotations__.keys():
             if k not in data:
                 return False, f'{_p(k)} {_p("is missing")}'
