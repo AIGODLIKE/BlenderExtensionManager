@@ -40,7 +40,7 @@ data = {
     'Error': '错误',
     'Choose File': '选择文件',
     'Selected': '已选择',
-    'Select a .py file': '选择一个.py文件',
+    'Select a __init__.py file': '选择一个__init__.py文件',
     'Select addon folder': '选择一个插件文件夹',
     'No Add-on Found': '未找到插件',
     'Install Failed': '安装失败',

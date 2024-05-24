@@ -41,7 +41,7 @@ def draw_all_cards(repo: str, search_field: Optional[ui.input] = None):
                 if not all(re.search(f, str(s), re.I) for f in filter_str.split('+')): continue
             else:
                 if not re.search(filter_str, str(s), re.I): continue
-            with ExtensionCard(d, search_field=search_field).classes('w-full shadow-1').tight() as card:
+            with ExtensionCard(d, search_field=search_field).classes('w-full').props('flat bordered').tight() as card:
                 card.repo_name = repo
 
 

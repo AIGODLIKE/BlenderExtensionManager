@@ -75,7 +75,7 @@ def draw():
         ui.notify(_p('Install Success'), type='positive')
 
     with ui.row().classes('w-full items-center'):
-        pick_file = ui.input(value='', placeholder=_p('Select a .py file'), on_change=refresh_bl_info) \
+        pick_file = ui.input(value='', placeholder=_p('Select a __init__.py file'), on_change=refresh_bl_info) \
             .on('click', choose_file) \
             .props('readonly outlined') \
             .style('min-width:400px;max-width:800px').bind_value(State, 'filepath')
