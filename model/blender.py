@@ -45,7 +45,7 @@ class Blender():
     def db_path(self):
         return get_bme_db().joinpath('blender.db')
 
-    def update_db(self):
+    def save_to_db(self):
         with open_db(self.db_path) as (conn, c):
             # 查询blenders表中是否存在当前Blender实例的记录
             try:
@@ -55,12 +55,17 @@ class Blender():
                 row = None
             if row is None:
                 # 如果不存在，则保存
-                self._save_to_db()
+                self.init_db()
             else:
                 # 如果存在，则更新
                 self._update_db()
 
-    def _save_to_db(self):
+    def remove_from_db(self):
+        with open_db(self.db_path) as (conn, c):
+            c.execute("DELETE FROM blenders WHERE path=?", (self.path,))
+            conn.commit()
+
+    def init_db(self):
         with open_db(self.db_path) as (conn, c):
             c.execute('''
                         CREATE TABLE IF NOT EXISTS blenders

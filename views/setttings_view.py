@@ -72,8 +72,8 @@ def draw(tabs:ui.element):
     with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
         with basic_card("Default Tab"):
             ui.select(value=config.data['default_tab'], options={
+                'Blender': _p('Blender'),
                 'Extensions': _p('Extensions'),
-                'Convert': _p('Convert'),
                 'Settings': _p('Settings')
             }, on_change=on_change_tab)
 

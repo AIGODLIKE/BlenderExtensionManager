@@ -36,24 +36,36 @@ async def verify_blender(container):
 
     with container:
         with ui.element('q-intersection').props('transition="scale"'):
-            blender_card(b3d)
-    b3d.update_db()
+            blender_card(b3d, container)
+    b3d.save_to_db()
     await asyncio.sleep(1)
+    n.dismiss()
 
 
-def draw_build_info(b3d):
-    ui.label(f'Version: {b3d.version}')
-    ui.label(f'Date: {b3d.date}')
-    ui.label(f'Hash: {b3d.hash}')
-    ui.label(f'Path: {b3d.path}')
+def load_all(container):
+    blenders = Blender.load_all_from_db()
+    for b in blenders:
+        blender_card(b, container)
 
 
-def blender_card(b3d: Blender = None):
-    with ui.card().classes('w-64 h-48'):
+def remove_blender(card: ui.card, container: ui.row):
+    card.blender.remove_from_db()
+    ui.notify(_p('Removed'))
+    container.clear()
+    with container:
+        load_all(container)
+
+
+def blender_card(b3d: Blender, container: ui.row):
+    with ui.card().classes('w-64 h-48') as card:
+        card.blender = b3d
         with ui.dialog() as dialog, ui.card().classes('w-96 items-start'):
             with ui.row().classes('w-full items-center gap-0'):
                 with ui.element('q-list'):
-                    draw_build_info(b3d)
+                    ui.label(f'Version: {b3d.version}')
+                    ui.label(f'Date: {b3d.date}')
+                    ui.label(f'Hash: {b3d.hash}')
+                    ui.label(f'Path: {b3d.path}')
 
         with ui.column().classes('w-full items-start gap-0'):
             with ui.row().classes('w-full items-center px-0 gap-0'):
@@ -61,7 +73,8 @@ def blender_card(b3d: Blender = None):
                 ui.space()
                 ui.button(icon='info', on_click=lambda: dialog).props('dense rounded flat color="primary"')
                 edit = ui.checkbox().props('checked-icon="edit" unchecked-icon="edit_off"')
-                ui.button(icon='close').props('dense rounded flat color="red"')
+                ui.button(icon='close', on_click=lambda c=card: remove_blender(card, container)).props(
+                    'dense rounded flat color="red"')
             ui.space()
             path_input = ui.input(value=b3d.path).props(
                 'dense flat color="primary" outlined autogrow').classes('w-full').bind_enabled_from(edit, 'value')
@@ -80,9 +93,7 @@ def draw_all_b3d_cards():
                 ui.tooltip(_p('Verify All')).style('font-size: 100%')
 
     with ui.row().classes('w-full') as container:
-        blenders = Blender.load_all_from_db()
-        for b in blenders:
-            blender_card(b)
+        load_all(container)
 
 # draw_all_b3d_cards()
 
