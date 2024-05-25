@@ -1,6 +1,7 @@
 from nicegui import ui, app
-from views import extension_view, convert_view, setttings_view
+from views import extension_view, convert_view, setttings_view, blender_view
 from views.setttings_view import config
+from public_path import get_svg_str
 from translation import _p
 
 
@@ -14,6 +15,9 @@ def draw():
                     .props(
                 f'vertical swipeable active-bg-color="{bg_color}" active-color="primary" indicator-color="transparent"') \
                     .style('margin-top:150px') as tabs:
+                with ui.tab('Blender', label='').props('flat color=white no-caps'):
+                    ui.html(get_svg_str('blender.svg')).classes('w-full')
+                    ui.label(_p('Blender'))
                 ui.tab('Extensions', label=_p('Extensions'), icon='extension').props('flat color=white no-caps')
                 ui.tab('Settings', label=_p('Settings'), icon='settings').props('flat color=white no-caps')
             ui.button(icon='help', on_click=lambda: ui.notify('TODO')).props('flat color="white" dense rounded')
@@ -31,6 +35,8 @@ def draw():
 
     with ui.tab_panels(tabs, value=default_tab).classes('w-full h-full px-0 p-0').props(
             'transition-prev=jump-up transition-next=jump-down'):
+        with ui.tab_panel('Blender').classes('w-full h-full px-2 p-2'):
+            blender_view.draw()
         with ui.tab_panel('Extensions').classes('w-full h-full px-0 p-0'):
             with ui.tab_panels(ext_tabs, value='Manage').classes('w-full h-full px-0 p-0'):
                 with ui.tab_panel('Manage').classes('w-full h-full px-2 p-2'):

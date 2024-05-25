@@ -1,5 +1,6 @@
 import re
 import sqlite3
+import json
 from pathlib import Path
 from contextlib import contextmanager
 from public_path import get_bme_db
@@ -47,9 +48,11 @@ class Blender():
     def update_db(self):
         with open_db(self.db_path) as (conn, c):
             # 查询blenders表中是否存在当前Blender实例的记录
-            c.execute("SELECT * FROM blenders WHERE path = ?", (self.path,))
-            row = c.fetchone()
-
+            try:
+                c.execute("SELECT * FROM blenders WHERE path = ?", (self.path,))
+                row = c.fetchone()
+            except sqlite3.OperationalError:
+                row = None
             if row is None:
                 # 如果不存在，则保存
                 self._save_to_db()
@@ -92,3 +95,16 @@ class Blender():
                 self.is_valid = bool(is_valid)
                 return True
             return False
+
+    @staticmethod
+    def load_all_from_db() -> list['Blender']:
+        with open_db(Blender().db_path) as (conn, c):
+            c.execute("SELECT * FROM blenders")
+            rows = c.fetchall()
+            blenders = []
+            for row in rows:
+                blender = Blender()
+                blender.path, is_valid, blender.version_str, blender.version, blender.date, blender.hash = row
+                blender.is_valid = bool(is_valid)
+                blenders.append(blender)
+            return blenders

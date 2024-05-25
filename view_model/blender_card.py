@@ -1,7 +1,6 @@
 from nicegui import ui, app
 from pathlib import Path
 from translation import _p
-from global_worker import Worker
 import subprocess
 import asyncio
 from model.blender import Blender
@@ -38,7 +37,7 @@ async def verify_blender(container):
     with container:
         with ui.element('q-intersection').props('transition="scale"'):
             blender_card(b3d)
-
+    b3d.update_db()
     await asyncio.sleep(1)
 
 
@@ -69,6 +68,7 @@ def blender_card(b3d: Blender = None):
             with path_input.add_slot('append'):
                 ui.button(icon='folder').props('dense flat color="primary"')
 
+
 def draw_all_b3d_cards():
     with ui.row().classes('w-full'):
         ui.space()
@@ -80,13 +80,14 @@ def draw_all_b3d_cards():
                 ui.tooltip(_p('Verify All')).style('font-size: 100%')
 
     with ui.row().classes('w-full') as container:
-        pass
+        blenders = Blender.load_all_from_db()
+        for b in blenders:
+            blender_card(b)
 
-
-draw_all_b3d_cards()
+# draw_all_b3d_cards()
 
 
 # qfile = ui.element('q-file').props('filled label="Drop File Here"')
 # qfile.on('update:modelValue', lambda e: print(f"File: '{e.args}'"))
 
-ui.run(native=True)
+# ui.run(native=True)
