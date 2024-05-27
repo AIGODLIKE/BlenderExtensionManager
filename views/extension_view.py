@@ -7,7 +7,7 @@ from translation import _p
 
 @ui.refreshable
 def draw():
-    res,new_repos = get_b3d_local_repos()
+    res, new_repos = get_b3d_local_repos()
     warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
     warning.set_visibility(False)
     if not res:
@@ -25,6 +25,8 @@ def draw():
         if not res:
             warning.set_visibility(True)
             return
+        else:
+            warning.set_visibility(False)
 
         new_repos = list(new_repos)
         set_repos(new_repos)
@@ -64,5 +66,5 @@ def draw():
                 ui.tooltip(_p('Save All')).style('font-size: 100%')
 
         with ui.column().classes('w-full px-0 p-0') as list_all_cards:
-        # with ui.row().classes('w-full justify-center') as list_all_cards:
+            # with ui.row().classes('w-full justify-center') as list_all_cards:
             draw_all_cards(repo, search_field=search_field)

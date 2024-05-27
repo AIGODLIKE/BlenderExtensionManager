@@ -76,6 +76,8 @@ async def verify_blender(b3d: Blender, set_active=True) -> Union[Blender, bool]:
 
     if set_active:
         b3d.is_active = True
+        app.storage.general['blender_path'] = b3d.path
+        app.storage.general['blender_version'] = b3d.big_version
 
     return b3d
 
@@ -133,7 +135,10 @@ class BlenderCard(ui.card):
                 c.blender.is_active = False
                 c.blender.save_to_db()
 
-        await verify_blender(self.blender, set_active=False)
+        res = await verify_blender(self.blender, set_active=False)
+        if res:
+            app.storage.general['blender_path'] = res.path
+            app.storage.general['blender_version'] = res.big_version
         for c in self.container.default_slot.children:
             if isinstance(c, BlenderCard):
                 c.active_draw.clear()

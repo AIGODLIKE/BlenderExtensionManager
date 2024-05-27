@@ -8,12 +8,10 @@ data.update({
     'zh_CN': zh_CN,
 })
 
-config = Config()
-
 
 def _p(text: str) -> str:
     """return the translation of the text"""
-    lang = config.data['language']
+    lang = app.storage.general.get('language', 'en_US')
 
     d = data.get(lang, 'en_US')
     if d == 'en_US': return text
