@@ -2,13 +2,12 @@ import json
 from typing import Union, Optional, Callable
 from pathlib import Path
 from translation import _p
-from nicegui import ui
+from nicegui import ui, app
 from model.config import Config
 
 
 def get_b3d_ext_dir() -> Path:
-    config = Config()
-    version = config.data.get('blender_version', '4.2')
+    version = app.storage.general.get("blender_version")
     return Path.home().joinpath('AppData', 'Roaming', 'Blender Foundation', 'Blender', version, 'extensions')
 
 

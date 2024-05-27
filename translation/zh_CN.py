@@ -87,7 +87,7 @@ data = {
     'Manage Repo Extensions': '管理储存库扩展',
     'Convert Addon to Extension': '转换插件为扩展',
     'Invalid Blender': '无效的Blender',
-    'Blender verified:': 'Blender已验证：',
+    'Verified Success:': '验证成功：',
     'File exists and cannot be deleted': '文件存在且无法删除',
     'Zip file saved': 'Zip文件已保存',
     'Build Zip': '打包Zip',
@@ -97,5 +97,8 @@ data = {
     'Verify Blender...': '验证Blender...',
     'Already added this blender': '已添加此Blender',
     'Already Active': '已激活',
+    'Active': '激活',
+    'Activated': '已激活',
+    'Invalid': '无效',
 
 }

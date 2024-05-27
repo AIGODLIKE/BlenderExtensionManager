@@ -10,7 +10,6 @@ from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
 from view_model.functions import remove_repo_index_by_id, get_b3d_ext_dir
 
-
 def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
     """open explorer or finder"""
     import sys, os

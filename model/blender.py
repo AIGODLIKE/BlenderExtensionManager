@@ -42,6 +42,10 @@ class Blender():
             self.is_valid = True
         return self.is_valid
 
+    @property
+    def big_version(self):
+        return '.'.join(self.version.split('.')[:2])
+
     @staticmethod
     def db_path() -> Path:
         return get_bme_db().joinpath('blender.db')
