@@ -24,9 +24,10 @@ class Blender():
     hash: str
     date: str
 
-    def init_from_str(self, version_str: str):
+    def init_from_str(self, version_str: str)->bool:
         # find and set attr from s
         # s example: Blender 4.1.1 (hash e1743a0317bc built 2024-04-15 23:33:30)
+        # :return: bool
         self.version_str = version_str
         m = re.search(r'(\d+)\.(\d+)\.(\d+)', version_str)
         if m:
@@ -43,7 +44,8 @@ class Blender():
         return self.is_valid
 
     @property
-    def big_version(self):
+    def big_version(self)->str:
+        """Return the big version of the blender, like 4.1"""
         return '.'.join(self.version.split('.')[:2])
 
     @staticmethod
@@ -51,6 +53,7 @@ class Blender():
         return get_bme_db().joinpath('blender.db')
 
     def save_to_db(self):
+        """Save or update the record in blenders table."""
         with open_db(self.db_path()) as (conn, c):
             # 查询blenders表中是否存在当前Blender实例的记录
             try:
@@ -60,17 +63,19 @@ class Blender():
                 row = None
             if row is None:
                 # 如果不存在，则保存
-                self.init_db()
+                self._init_db()
             else:
                 # 如果存在，则更新
                 self._update_db()
 
     def remove_from_db(self):
+        """Remove the record in blenders table."""
         with open_db(self.db_path()) as (conn, c):
             c.execute("DELETE FROM blenders WHERE path=?", (self.path,))
             conn.commit()
 
-    def init_db(self):
+    def _init_db(self):
+        """Init the record in blenders table."""
         with open_db(self.db_path()) as (conn, c):
             column_str = ''
             set_values = []
@@ -97,6 +102,7 @@ class Blender():
             conn.commit()
 
     def _update_db(self):
+        """Update the record in blenders table."""
         with open_db(self.db_path()) as (conn, c):
             # 更新blenders表中的记录
             set_str = ', '.join([f"{column} = ?" for column in self.__annotations__.keys() if column != 'path'])
@@ -113,6 +119,7 @@ class Blender():
 
     @staticmethod
     def is_path_in_db(path) -> bool:
+        """Check if the path is in db"""
         with open_db(Blender.db_path()) as (conn, c):
             try:
                 c.execute("SELECT * FROM blenders WHERE path=?", (path,))
@@ -125,6 +132,9 @@ class Blender():
 
     @staticmethod
     def load_all_from_db() -> list['Blender']:
+        """Load all blenders from db and return a list of Blender instance
+        :return: list of Blender instance
+        """
         with open_db(Blender.db_path()) as (conn, c):
             blenders = []
             # if table not exists, return empty list
