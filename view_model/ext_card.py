@@ -29,9 +29,8 @@ def draw_all_cards(repo: str, search_field: Optional[ui.input] = None):
 
     if not search_field:
         for d in datas:
-            with ui.element('q-intersection').classes('w-full').props('transition="scale"'):
-                with ExtensionCard(d).classes('w-full shadow-1').tight() as card:
-                    card.repo_name = repo
+            with ExtensionCard(d).classes('w-full shadow-1').tight() as card:
+                card.repo_name = repo
     else:
         filter_str = search_field.value
         search_all = True if "+" in filter_str else False
@@ -43,10 +42,9 @@ def draw_all_cards(repo: str, search_field: Optional[ui.input] = None):
             else:
                 if not re.search(filter_str, str(s), re.I): continue
 
-            with ui.element('q-intersection').classes('w-full').props('transition="scale"'):
-                with ExtensionCard(d, search_field=search_field).classes('w-full').props(
-                        'flat bordered').tight() as card:
-                    card.repo_name = repo
+            with ExtensionCard(d, search_field=search_field).classes('w-full').props(
+                    'flat bordered').tight() as card:
+                card.repo_name = repo
 
 
 def save_all_cards(container: Union[ui.row, ui.column, ui.element], repo: str):
