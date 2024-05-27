@@ -94,4 +94,8 @@ data = {
     'Done': '完成',
     'Cannot save inside source add-on folder': '无法保存在来源插件文件夹内',
     '__init__.py not found': '未找到__init__.py',
+    'Verify Blender...': '验证Blender...',
+    'Already added this blender': '已添加此Blender',
+    'Already Active': '已激活',
+
 }
