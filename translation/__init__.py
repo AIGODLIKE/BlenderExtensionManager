@@ -1,5 +1,4 @@
 from nicegui import app
-from model.config import Config
 from .zh_CN import data as zh_CN
 
 data = {}

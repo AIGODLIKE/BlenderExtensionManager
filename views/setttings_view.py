@@ -1,11 +1,8 @@
 from nicegui import app, ui
 from translation import _p
-from model.config import Config
-from contextlib import contextmanager
-from typing import Callable
+
 
 dark = ui.dark_mode()
-config = Config()
 dark_mode = app.storage.general.get('dark_mode', 'white')
 
 
@@ -47,20 +44,20 @@ def draw(tabs: ui.element):
 
     with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
         with basic_card("Default Tab"):
-            ui.select(options={
+            ui.select(value=app.storage.general.get('default_tab','Blender'),options={
                 'Blender': _p('Blender'),
                 'Extensions': _p('Extensions'),
                 'Settings': _p('Settings')
             }, ).bind_value(app.storage.general, 'default_tab')
 
         with basic_card("Theme"):
-            ui.select(options={
+            ui.select(value = app.storage.general.get('dark_mode','white'),options={
                 'white': _p('White'),
                 'dark': _p('Dark'),
             }, on_change=lambda v: on_change_theme(v, tabs)).bind_value(app.storage.general, 'dark_mode')
 
         with basic_card("Language"):
-            ui.select(options={
+            ui.select(value = app.storage.general.get('language','en_US'),options={
                 'zh_CN': '中文',
                 'en_US': 'English'
             }, on_change=on_change_lang).bind_value(app.storage.general, 'language')

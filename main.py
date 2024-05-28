@@ -2,14 +2,14 @@ import sys
 import nicegui
 from nicegui import ui, app
 from views import main_window
-from model.config import Config
 
 if __name__ in {"__main__", "__mp_main__"}:
     app.native.window_args['easy_drag'] = False
-    # TODO version control
+    lang = app.storage.general.get('language','en_US').replace('_', '-')
+
     args = {
         'title': "Blender Extension Manager",
-        'language':Config().data.get('language','en_US').replace('_', '-')
+        'language':lang
     }
 
     if '--web' not in sys.argv:

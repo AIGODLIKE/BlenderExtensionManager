@@ -3,7 +3,6 @@ from typing import Union, Optional, Callable
 from pathlib import Path
 from translation import _p
 from nicegui import ui, app
-from model.config import Config
 
 
 def get_b3d_ext_dir() -> Path:
