@@ -83,13 +83,12 @@ async def verify_blender(b3d: Blender, set_active=True) -> Union[Blender, bool]:
 
 
 class BlenderCard(ui.card):
-    def __init__(self, b3d: Blender, container: ui.row):
+    def __init__(self, b3d: Blender, container: ui.element):
         super().__init__()
         self.blender = b3d
         self.container = container
-        self.classes('w-64 h-48 no-shadow').props('bordered')
 
-        with self:
+        with self.classes('w-64 h-48 no-shadow').props('bordered'):
             with ui.column().classes('w-full items-start gap-1'):
                 ui.image(get_icon_path('blender.png')).classes('h-1/3') \
                     .style('filter: grayscale(100%)').bind_visibility_from(self.blender, 'is_active', lambda v: not v)
@@ -151,7 +150,7 @@ class BlenderCard(ui.card):
         self.delete()
 
 
-def load_all(container: ui.row):
+def load_all(container: ui.element):
     blenders = Blender.load_all_from_db()
     for b in blenders:
         if b.is_active:

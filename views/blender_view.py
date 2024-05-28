@@ -10,6 +10,8 @@ async def verify_all(container: ui.row):
 
 
 def draw():
+    ui.context.client.content.classes('h-screen')
+
     with ui.row().classes('w-full'):
         ui.space()
         with ui.button_group().props('rounded'):
@@ -19,5 +21,6 @@ def draw():
             with ui.button(icon='refresh', on_click=lambda: verify_all(container)).classes('h-12'):
                 ui.tooltip(_p('Verify All')).style('font-size: 100%')
 
-    with ui.row().classes('w-full') as container:
-        load_all(container)
+    with ui.scroll_area().classes('w-full h-full'):
+        with ui.row().classes('w-full') as container:
+            load_all(container)

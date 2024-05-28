@@ -43,6 +43,9 @@ def draw():
         with list_all_cards:
             draw_all_cards(repo, search_field=e.sender)
 
+    ui.context.client.content.classes('h-screen')
+
+
     with ui.row().classes('w-full items-center'):
         with ui.select(selects, value=repo, on_change=lambda v: set_repo(v.value), label=_p('Repo')) \
                 .props('outlined').style("min-width:200px; max-width: 300px") \
@@ -65,6 +68,5 @@ def draw():
             with ui.button(icon='save', on_click=lambda: save_all_cards(list_all_cards, repo)).classes('h-12'):
                 ui.tooltip(_p('Save All')).style('font-size: 100%')
 
-        with ui.column().classes('w-full px-0 p-0') as list_all_cards:
-            # with ui.row().classes('w-full justify-center') as list_all_cards:
-            draw_all_cards(repo, search_field=search_field)
+    with ui.scroll_area().classes('w-full h-full') as list_all_cards:
+        draw_all_cards(repo, search_field=search_field)

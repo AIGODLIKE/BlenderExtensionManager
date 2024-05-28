@@ -36,7 +36,7 @@ def draw():
 
     with ui.tab_panels(tabs, value=default_tab).classes('w-full h-full px-0 p-0').props(
             'transition-prev=jump-up transition-next=jump-down'):
-        with ui.tab_panel('Blender').classes('w-full h-full px-2 p-2'):
+        with ui.tab_panel('Blender').classes('w-full h-full px-0 p-2'):
             blender_view.draw()
         with ui.tab_panel('Extensions').classes('w-full h-full px-0 p-0'):
             with ui.tab_panels(ext_tabs, value='Manage').classes('w-full h-full px-0 p-0'):
