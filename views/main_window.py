@@ -1,13 +1,13 @@
 from nicegui import ui, app
 from views import extension_view, convert_view, setttings_view, blender_view
-from views.setttings_view import config
 from public_path import get_svg_str
 from translation import _p
 
 
 def draw():
-    bg_color = config.data.get('dark_mode')
-    default_tab = config.data['default_tab']
+    bg_color = app.storage.general.get('dark_mode','white')
+    default_tab = app.storage.general.get('default_tab','Blender')
+    version = app.storage.general.get("version")
 
     with ui.left_drawer().classes('px-0 p-2 bg-primary').props('width=100 breakpoint=400') as left_drawer:
         with ui.column().classes('w-full h-full items-center'):
@@ -21,6 +21,7 @@ def draw():
                 ui.tab('Extensions', label=_p('Extensions'), icon='extension').props('flat color=white no-caps')
                 ui.tab('Settings', label=_p('Settings'), icon='settings').props('flat color=white no-caps')
             ui.button(icon='help', on_click=lambda: ui.notify('TODO')).props('flat color="white" dense rounded')
+            ui.label('v'+version).classes('text-xs text-white')
 
     with ui.element('q-toolbar').classes('items-center pywebview-drag-region h-12'):
         with ui.row().classes('w-full items-center px-0 p-0'):
