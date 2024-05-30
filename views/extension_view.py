@@ -12,9 +12,9 @@ def draw():
     warning.set_visibility(False)
     if not res:
         warning.set_visibility(True)
-        new_repos = {}
+        return
 
-    repos, set_repos = ui.state(list(new_repos))
+    repos, set_repos = ui.state(list())
     repo, set_repo = ui.state('user_default')
     selects: dict = {repo: repo for repo in repos}
 

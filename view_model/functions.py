@@ -54,6 +54,20 @@ def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], No
         return d
 
 
+def get_repos_data(repo_name: str) -> list[dict]:
+    res, repos = get_b3d_local_repos()
+    if not res:
+        return []
+    index_file = repos.get(repo_name, None)
+    if not index_file:
+        return []
+
+    data = parse_repo_index_file(index_file)
+    if data is None:
+        return []
+    return data
+
+
 def backup_repo_index(repo_name: str) -> tuple[bool, str]:
     import time, shutil
 
@@ -71,7 +85,7 @@ def backup_repo_index(repo_name: str) -> tuple[bool, str]:
     return (True, f'Backup success: {str(backup_fp)}')
 
 
-def write_repo_index(repo_name: str, data_list: list[str]) -> tuple[bool, str]:
+def write_repo_index(repo_name: str, data_list: list[dict]) -> tuple[bool, str]:
     # backup dir
     res, msg = backup_repo_index(repo_name)
     if not res: return (res, msg)

@@ -104,7 +104,7 @@ class RepoIndexFile():
         return self._write_all(data_list)
 
 
-class Repos():
+class ReposHelper():
     blender_version: str
     index_files: dict[RepoIndexFile]
 
@@ -128,7 +128,7 @@ class Repos():
             bool: True if success
             None or dict '{repo_name:index_file}'
         """
-        d = Repos.get_b3d_ext_dir(blender_version)
+        d = ReposHelper.get_b3d_ext_dir(blender_version)
         if not d.exists():
             return False, None
 
@@ -153,3 +153,13 @@ class Repos():
                 repo_index_file[directory.name] = directory.joinpath('.blender_ext', 'index.json')
 
         return True, repo_index_file
+
+    def list_available_repos(self) -> list[str]:
+        """
+        list all available repos
+        :return: list of repo names
+        """
+        res, repos = self.get_b3d_repo_index_file(self.blender_version)
+        if not res:
+            return []
+        return list(repos.keys())
