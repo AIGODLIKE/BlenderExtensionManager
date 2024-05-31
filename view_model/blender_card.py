@@ -96,7 +96,7 @@ class BlenderCard(ui.card):
 
                 with ui.column().classes('w-full items-start gap-1') as self.active_draw:
                     self.draw_active()
-
+    @ui.refreshable
     def draw_active(self):
         b3d = self.blender
         with ui.row().classes('w-full items-center px-0 gap-1'):
@@ -138,11 +138,8 @@ class BlenderCard(ui.card):
         if res:
             app.storage.general['blender_path'] = res.path
             app.storage.general['blender_version'] = res.big_version
-        for c in self.container.default_slot.children:
-            if isinstance(c, BlenderCard):
-                c.active_draw.clear()
-                with c.active_draw:
-                    c.draw_active()
+        self.blender = res
+        self.draw_active.refresh()
 
     def remove_blender(self):
         self.blender.remove_from_db()
