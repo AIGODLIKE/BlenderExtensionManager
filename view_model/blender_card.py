@@ -159,7 +159,6 @@ class BlenderCard(ui.card):
                 ui.button(_p('Cancel'), on_click=lambda: dialog.submit(False)).props('flat color="primary"')
                 ui.button(_p('Yes'), on_click=lambda: dialog.submit(True)).props('color="red"')
         res = await dialog
-        print(res)
         if res:
             self.blender.remove_from_db()
             ui.notify(_p('Removed'))
