@@ -166,7 +166,7 @@ class ExtensionCard(ui.card):
 
     def draw_expand(self):
         with ui.card_section().classes('w-full').props('dense-toggle'):
-            with ui.element('q-list').props('dense bordered'):
+            with ui.list().props('dense bordered'):
                 # Required data
                 with ui.element('q-item').classes('items-center').props('clickable') \
                         .on('dblclick', lambda: self.on_dbclick_copy(self.data.get('id'))):
@@ -201,7 +201,7 @@ class ExtensionCard(ui.card):
                     with exp.add_slot('header'):
                         with ui.row().classes('w-full items-center'):
                             ui.label(_p('Optional'))
-                    with ui.element('q-list').classes('w-full').props('dense bordered'):
+                    with ui.list().classes('w-full').props('dense bordered'):
                         for k, v in self.data.items():
                             if k not in ExtensionsOptional.__annotations__.keys(): continue
                             with ui.element('q-item').classes('w-full items-center').props('clickable'):

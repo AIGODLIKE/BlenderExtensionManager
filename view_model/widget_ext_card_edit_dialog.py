@@ -50,7 +50,7 @@ class CardEditDialog(ui.dialog):
             else:
                 ui.input(label=_p(k)).bind_value(self.scheme, k).style('min-width:400px; max-width: 600px')
         ui.update()
-        with ui.element('q-list').props('bordered'):
+        with ui.list().props('bordered'):
             for k in ExtensionsOptional.__annotations__.keys():
                 if hasattr(self.scheme, k):
                     if k in ['permissions', 'platforms']: continue

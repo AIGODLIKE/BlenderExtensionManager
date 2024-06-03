@@ -34,6 +34,7 @@ data = {
     'Refreshed': '已刷新',
     'Save All': '保存全部',
     'Reload': '重新加载',
+    'Loading Extension Repo': '加载扩展存储库',
     'Reload From Disk': '从磁盘重新加载',
     'Search': '搜索',
     'Info': '信息',
@@ -100,5 +101,13 @@ data = {
     'Active': '激活',
     'Activated': '已激活',
     'Invalid': '无效',
+    'Version': '版本',
+    'Date': '日期',
+    'Hash': '哈希',
+    'Path': '路径',
+    'Updating': '更新中',
+    'Are you sure to remove this blender?': '确定要移除此Blender吗？',
+    'Confirm': '确认',
+    'Yes': '是的',
 
 }

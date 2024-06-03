@@ -29,7 +29,7 @@ async def select_blender(container: ui.row):
         return
     b3d = Blender()
     b3d.path = f
-    b3d = await verify_blender(b3d)
+    b3d = await verify_blender(b3d, set_active=False)
     if b3d:
         with container:
             with ui.element('q-intersection').props('transition="scale"'):
@@ -37,7 +37,7 @@ async def select_blender(container: ui.row):
 
 
 async def verify_blender(b3d: Blender, set_active=True) -> Union[Blender, bool]:
-    n = ui.notification(message=_p("Verify Blender..."), spinner=True, type="ongoing", timeout=3)
+    n = ui.notification(message=_p("Verify Blender..."), spinner=True, type="ongoing", timeout=2)
 
     async def _error_n():
         n.message = _p('Invalid Blender')
@@ -87,6 +87,7 @@ class BlenderCard(ui.card):
         super().__init__()
         self.blender = b3d
         self.container = container
+        self.is_updating = False
 
         with self.classes('w-64 h-48 no-shadow').props('bordered'):
             with ui.column().classes('w-full items-start gap-1'):
@@ -106,28 +107,36 @@ class BlenderCard(ui.card):
             ui.space()
             with ui.button(icon='info', on_click=lambda: open_file(Path(b3d.path))) \
                     .props('dense flat color="primary rounded"'):
-                with ui.tooltip().classes(f'text-lg bg-primary shadow-2'):
-                    with ui.element('q-list'):
-                        ui.label(f'Version: {b3d.version}')
-                        ui.label(f'Date: {b3d.date}')
-                        ui.label(f'Hash: {b3d.hash}')
-                        ui.label(f'Path: {b3d.path}')
-            ui.button(icon='close', on_click=self.remove_blender).props(
+                with ui.tooltip().classes(f'text-lg bg-primary shadow-2').props('max-width=600px'):
+                    with ui.list():
+                        ui.label(f'{_p("Version")}: {b3d.version}')
+                        ui.label(f'{_p("Date")}: {b3d.date}')
+                        ui.label(f'{_p("Hash")}: {b3d.hash}')
+                        ui.label(f'{_p("Path")}: {b3d.path}')
+            ui.button(icon='close', on_click=lambda: self.remove_blender()).props(
                 'dense rounded flat color="red"')
 
         ui.button(_p('Invalid')).classes('text-red-5 text-lg') \
             .bind_visibility_from(self.blender, 'is_valid', lambda v: not v) \
             .props('no-caps flat dense')
         with ui.row().bind_visibility_from(self.blender, 'is_valid'):
-            ui.button(_p('Activated'), on_click=self.set_active).classes(
-                'text-lg text-green-6').props(
-                'no-caps flat dense') \
-                .bind_visibility_from(self.blender, 'is_active')
-            ui.button(_p('Active'), on_click=self.set_active).classes('text-lg text-grey-6').props(
-                'no-caps flat dense') \
-                .bind_visibility_from(self.blender, 'is_active', lambda v: not v)
+            with ui.row().bind_visibility_from(self, 'is_updating'):
+                ui.spinner(size='sm').classes('text-lg text-grey-6')
+                ui.label(_p('Updating')).classes('text-lg text-grey-6')
+            with ui.row().bind_visibility_from(self, 'is_updating', lambda v: not v):
+                ui.checkbox(_p('Activated'), ).classes('text-lg text-green-6') \
+                    .props('no-caps flat dense') \
+                    .bind_visibility_from(self.blender, 'is_active') \
+                    .on('click', self.set_active) \
+                    .bind_value_from(self.blender, 'is_active')
+                ui.checkbox(_p('Active'), ).classes('text-lg text-grey-6') \
+                    .props('no-caps flat dense') \
+                    .bind_visibility_from(self.blender, 'is_active', lambda v: not v) \
+                    .on('click', self.set_active) \
+                    .bind_value_from(self.blender, 'is_active')
 
     async def set_active(self):
+        self.is_updating = True
         for c in self.container.default_slot.children:
             if c == self:
                 self.blender.is_active = True
@@ -135,17 +144,26 @@ class BlenderCard(ui.card):
                 c.blender.is_active = False
                 c.blender.save_to_db()
 
-        res = await verify_blender(self.blender, set_active=False)
+        res = await verify_blender(self.blender, set_active=True)
         if res:
             app.storage.general['blender_path'] = res.path
             app.storage.general['blender_version'] = res.big_version
         self.blender = res
         self.draw_active.refresh()
+        self.is_updating = False
 
-    def remove_blender(self):
-        self.blender.remove_from_db()
-        ui.notify(_p('Removed'))
-        self.delete()
+    async def remove_blender(self):
+        with ui.dialog() as dialog, ui.card().classes('items-center'):
+            ui.label(_p('Are you sure to remove this blender?'))
+            with ui.row():
+                ui.button(_p('Cancel'), on_click=lambda: dialog.submit(False)).props('flat color="primary"')
+                ui.button(_p('Yes'), on_click=lambda: dialog.submit(True)).props('color="red"')
+        res = await dialog
+        print(res)
+        if res:
+            self.blender.remove_from_db()
+            ui.notify(_p('Removed'))
+            self.delete()
 
 
 def load_all(container: ui.element):

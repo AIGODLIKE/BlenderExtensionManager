@@ -1,4 +1,4 @@
-from nicegui import ui, events
+from nicegui import ui, events, app
 from typing import Callable
 from view_model.functions import get_b3d_local_repos
 from view_model.ext_card import draw_all_cards, save_all_cards
@@ -8,17 +8,6 @@ from translation import _p
 @ui.refreshable
 def draw():
     ui.context.client.content.classes('h-screen')
-
-    res, new_repos = get_b3d_local_repos()
-    warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
-    warning.set_visibility(False)
-    if not res:
-        warning.set_visibility(True)
-        new_repos = {}
-
-    repos, set_repos = ui.state(list(new_repos))
-    repo, set_repo = ui.state('user_default')
-    selects: dict = {repo: repo for repo in repos}
 
     def refresh_repos():
         list_all_cards.clear()
@@ -38,7 +27,16 @@ def draw():
             draw_all_cards(repo, search_field=search_field)
 
         reports = '\n'.join(new_repos)
-        ui.notify(f'{_p("Reload") + " " + reports}')
+        ui.notify(f'{_p("Loading Extension Repo") + " " + reports}')
+
+    res, new_repos = get_b3d_local_repos()
+    if not res: new_repos = {}
+    warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+    warning.set_visibility(not res)
+
+    repos, set_repos = ui.state(list(new_repos))
+    repo, set_repo = ui.state('user_default')
+    selects: dict = {repo: repo for repo in repos}
 
     async def search(e: events.ValueChangeEventArguments) -> None:
         list_all_cards.clear()
@@ -69,3 +67,7 @@ def draw():
 
     with ui.scroll_area().classes('w-full h-full') as list_all_cards:
         draw_all_cards(repo, search_field=search_field)
+    # signal from verify blender
+    ui.input(on_change=refresh_repos).classes('hidden').bind_value_from(app.storage.general,
+                                                                                  'blender_version')
+
