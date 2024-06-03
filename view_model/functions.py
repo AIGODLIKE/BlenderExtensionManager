@@ -6,7 +6,7 @@ from nicegui import ui, app
 
 
 def get_b3d_ext_dir() -> Path:
-    version = app.storage.general.get("blender_version",'4.2')
+    version = app.storage.general.get("blender_version", '4.2')
     return Path.home().joinpath('AppData', 'Roaming', 'Blender Foundation', 'Blender', version, 'extensions')
 
 
@@ -153,10 +153,11 @@ def remove_repo_index_by_id(repo_name: str, id: str) -> tuple[bool, str]:
     return (True, f'write success: {str(fp)}')
 
 
-def build_addon_zip_file(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]:
+def build_addon_zip_file(zip_dir: Path, dest_zip_path: Path, fix_name_id: str = None) -> tuple[bool, str]:
     """
     :param zip_dir:
-    :param dest_zip_path:
+    :param dest_zip_path: output zip filepath
+    :param fix_name_id: use id to name sub_dir_instead of name
     :return:
         bool: success
         str: dest_zip_path/err_msg
@@ -166,7 +167,10 @@ def build_addon_zip_file(zip_dir: Path, dest_zip_path: Path) -> tuple[bool, str]
 
     def prepare_files():
         temp_dir = dest_zip_path.parent.joinpath('BME_TMP_ZIP')
-        sub_dir = temp_dir.joinpath(dest_zip_path.stem)
+        if fix_name_id:
+            sub_dir = temp_dir.joinpath(fix_name_id)
+        else:
+            sub_dir = temp_dir.joinpath(dest_zip_path.stem)
         if sub_dir.exists():
             shutil.rmtree(sub_dir)
         sub_dir.mkdir(parents=True)

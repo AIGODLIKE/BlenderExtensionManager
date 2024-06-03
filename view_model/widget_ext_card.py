@@ -10,6 +10,7 @@ from translation import _p
 from view_model.widget_ext_card_edit_dialog import CardEditDialog
 from view_model.functions import remove_repo_index_by_id, get_b3d_ext_dir
 
+
 def open_file(repo_name: str, id: str, designation: Union[None, Path] = None):
     """open explorer or finder"""
     import sys, os
@@ -106,12 +107,12 @@ class ExtensionCard(ui.card):
 
         if self.addon_path:
             if fp.parent.resolve() == self.addon_path:
-                ui.notify(_p('Cannot save inside source add-on folder'), type='warning',close_button='OK')
+                ui.notify(_p('Cannot save inside source add-on folder'), type='warning', close_button='OK')
                 return
             tg_dir = self.addon_path
             n = ui.notification(message=_p('Building Zip...'), spinner=True, type='ongoing', timeout=None)
             Schema.write_toml(directory=self.addon_path, data=self.data)
-            res, msg = build_addon_zip_file(tg_dir, fp)
+            res, msg = build_addon_zip_file(tg_dir, fp, self.data.get('id'))
             n.spinner = False
             if res:
                 n.message = _p('Done')
@@ -157,7 +158,7 @@ class ExtensionCard(ui.card):
                 with ui.button(icon='edit', on_click=lambda: self.open_edit_dialog()).props('round flat'):
                     ui.tooltip(_p('Edit')).style('font-size: 100%')
                 with ui.button(icon='archive', on_click=lambda: self.build_zip()).props('round flat') \
-                        .bind_visibility_from(self, 'addon_path', lambda v:v):
+                        .bind_visibility_from(self, 'addon_path', lambda v: v):
                     ui.tooltip(_p('Build Zip')).style('font-size: 100%')
 
                 ui.button(icon='close', on_click=lambda: self.remove_card()).props('round flat color="red"') \
