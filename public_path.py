@@ -12,7 +12,10 @@ def true_path() -> Path:
 
 
 def get_bme_db() -> Path:
-    return true_path().joinpath('bme_db')
+    fp = Path.home().joinpath('AppData', 'Roaming', 'BME')
+    if not fp.exists():
+        fp.mkdir(parents=True)
+    return fp
 
 
 def get_statics() -> Path:
@@ -24,19 +27,20 @@ def get_svg_str(name: str) -> Union[str, None]:
         full_name = name + '.svg'
     else:
         full_name = name
-    fp = get_statics().joinpath('svg',full_name)
+    fp = get_statics().joinpath('svg', full_name)
     if not fp.exists():
         return None
 
     with open(fp, 'r', encoding='utf-8') as f:
         return f.read()
 
+
 def get_icon_path(name: str) -> Union[Path, None]:
     if not name.endswith('.png'):
         full_name = name + '.png'
     else:
         full_name = name
-    fp = get_statics().joinpath('icon',full_name)
+    fp = get_statics().joinpath('icon', full_name)
     if not fp.exists():
         return None
     return fp

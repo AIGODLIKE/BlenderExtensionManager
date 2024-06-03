@@ -24,7 +24,7 @@ def common_data_params() -> list:
     parms = [
         '--noconsole',  # 不显示控制台
         '--add-data', f'{Path(nicegui.__file__).parent}{os.pathsep}nicegui',
-        '--add-data', f'bme_db{os.pathsep}bme_db',  # you can add your own additional resources
+        # '--add-data', f'data{os.pathsep}data',  # you can add your own additional resources
         '--add-data', f'bme_statics{os.pathsep}bme_statics'  # you can add your own additional resources
     ]
 
