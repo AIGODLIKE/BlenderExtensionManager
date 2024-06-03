@@ -3,7 +3,7 @@ import nicegui
 from nicegui import ui, app
 from views import main_window
 
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 if __name__ in {"__main__", "__mp_main__"}:
     app.native.window_args['easy_drag'] = False
