@@ -14,7 +14,7 @@ def draw():
     warning.set_visibility(False)
     if not res:
         warning.set_visibility(True)
-        return
+        new_repos = {}
 
     repos, set_repos = ui.state(list(new_repos))
     repo, set_repo = ui.state('user_default')

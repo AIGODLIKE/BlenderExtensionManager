@@ -34,7 +34,7 @@ class CardEditDialog(ui.dialog):
         for k, v in self.scheme.__annotations__.items():
             if k in ['name', 'id', 'type', 'schema_version']:
                 continue
-            elif k in ['tags'] and isinstance(getattr(self.scheme, k), list):
+            elif k in ['tags','license'] and isinstance(getattr(self.scheme, k), list):
                 tag_list = getattr(self.scheme, k)
                 with ui.row(wrap=False).classes('w-full gap-0 px-1 items-center') as tag_row:
                     self.draw_tags(k, tag_list, tag_row)
@@ -66,7 +66,7 @@ class CardEditDialog(ui.dialog):
         if new_tags is None:
             return
         elif len(new_tags) == 0:
-            ui.notify(_p('At least one tag'))
+            ui.notify(_p('At least one tag'),type= 'warning')
             return
         if new_tags == tags:
             ui.notify(_p('No change'),type='warning')
