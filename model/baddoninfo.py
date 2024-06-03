@@ -17,7 +17,7 @@ from .schema import Schema
 """
 
 
-class Bl_info:
+class BAddonInfo:
     name: str
     author: str
     blender: tuple[int, int, int]

@@ -3,7 +3,13 @@ from views import extension_view, convert_view, setttings_view, blender_view
 from public_path import get_svg_str
 from translation import _p
 
+@ui.page('/test')
+def test():
+    ui.label('test')
 
+def on_change_tab(v):
+    if v.value == 'test':
+        ui.navigate.to('/test')
 def draw():
     bg_color = app.storage.general.get('dark_mode','white')
     default_tab = app.storage.general.get('default_tab','Blender')
@@ -11,7 +17,7 @@ def draw():
 
     with ui.left_drawer().classes('px-0 p-2 bg-primary').props('width=100 breakpoint=400') as left_drawer:
         with ui.column().classes('w-full h-full items-center'):
-            with ui.tabs().classes('w-full text-white') \
+            with ui.tabs(on_change=on_change_tab).classes('w-full text-white') \
                     .props(
                 f'vertical swipeable active-bg-color="{bg_color}" active-color="primary" indicator-color="transparent"') \
                     .style('margin-top:150px') as tabs:
@@ -20,6 +26,7 @@ def draw():
                     ui.label(_p('Blender'))
                 ui.tab('Extensions', label=_p('Extensions'), icon='extension').props('flat color=white no-caps')
                 ui.tab('Settings', label=_p('Settings'), icon='settings').props('flat color=white no-caps')
+                # ui.tab('test', label=_p('Test'), icon='settings').props('flat color=white no-caps')
             ui.button(icon='help', on_click=lambda: ui.notify('TODO')).props('flat color="white" dense rounded')
             ui.label('v'+version).classes('text-xs text-white')
 

@@ -6,7 +6,7 @@ from nicegui import ui, app
 
 
 def get_b3d_ext_dir() -> Path:
-    version = app.storage.general.get("blender_version")
+    version = app.storage.general.get("blender_version",'4.2')
     return Path.home().joinpath('AppData', 'Roaming', 'Blender Foundation', 'Blender', version, 'extensions')
 
 
@@ -46,6 +46,7 @@ def get_b3d_local_repos() -> tuple[bool, Union[dict[str, Path], None, str]]:
 
 
 def parse_repo_index_file(fp: Path, version: str = 'v1') -> Union[list[dict], None]:
+    if not fp or not fp.exists(): return None
     with open(fp, mode='r', encoding='utf-8') as f:
         json_data = json.load(f)
         v = json_data.get('version')

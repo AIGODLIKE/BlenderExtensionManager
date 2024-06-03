@@ -8,7 +8,6 @@ from view_model.widget_ext_card import ExtensionCard
 from view_model.functions import parse_repo_index_file, get_b3d_local_repos, write_repo_index
 from translation import _p
 
-
 def draw_all_cards(repo: str, search_field: Optional[ui.input] = None):
     res, repos = get_b3d_local_repos()
     if not res:

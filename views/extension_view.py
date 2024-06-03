@@ -7,6 +7,8 @@ from translation import _p
 
 @ui.refreshable
 def draw():
+    ui.context.client.content.classes('h-screen')
+
     res, new_repos = get_b3d_local_repos()
     warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
     warning.set_visibility(False)
@@ -14,7 +16,7 @@ def draw():
         warning.set_visibility(True)
         return
 
-    repos, set_repos = ui.state(list())
+    repos, set_repos = ui.state(list(new_repos))
     repo, set_repo = ui.state('user_default')
     selects: dict = {repo: repo for repo in repos}
 
@@ -42,9 +44,6 @@ def draw():
         list_all_cards.clear()
         with list_all_cards:
             draw_all_cards(repo, search_field=e.sender)
-
-    ui.context.client.content.classes('h-screen')
-
 
     with ui.row().classes('w-full items-center'):
         with ui.select(selects, value=repo, on_change=lambda v: set_repo(v.value), label=_p('Repo')) \
