@@ -70,7 +70,7 @@ python main.py --dev
 ### build
 
 > only windows now
-> windows_output: .dist/BME.exe
+> windows_output: .dist/BEM.exe
 
 ```
 python build.py

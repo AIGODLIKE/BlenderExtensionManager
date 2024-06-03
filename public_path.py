@@ -11,15 +11,15 @@ def true_path() -> Path:
     return Path(__file__).parent
 
 
-def get_bme_db() -> Path:
-    fp = Path.home().joinpath('AppData', 'Roaming', 'BME')
+def get_bem_db() -> Path:
+    fp = Path.home().joinpath('AppData', 'Roaming', 'BEM')
     if not fp.exists():
         fp.mkdir(parents=True)
     return fp
 
 
 def get_statics() -> Path:
-    return true_path().joinpath('bme_statics')
+    return true_path().joinpath('bem_statics')
 
 
 def get_svg_str(name: str) -> Union[str, None]:

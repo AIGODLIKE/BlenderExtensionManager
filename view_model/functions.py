@@ -166,7 +166,7 @@ def build_addon_zip_file(zip_dir: Path, dest_zip_path: Path, fix_name_id: str = 
     import zipfile
 
     def prepare_files():
-        temp_dir = dest_zip_path.parent.joinpath('BME_TMP_ZIP')
+        temp_dir = dest_zip_path.parent.joinpath('BEM_TMP_ZIP')
         if fix_name_id:
             sub_dir = temp_dir.joinpath(fix_name_id)
         else:

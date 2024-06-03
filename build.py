@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-APP_NAME = 'BME'
+APP_NAME = 'BEM'
 icon_path = ''
 
 
@@ -25,7 +25,7 @@ def common_data_params() -> list:
         '--noconsole',  # 不显示控制台
         '--add-data', f'{Path(nicegui.__file__).parent}{os.pathsep}nicegui',
         # '--add-data', f'data{os.pathsep}data',  # you can add your own additional resources
-        '--add-data', f'bme_statics{os.pathsep}bme_statics'  # you can add your own additional resources
+        '--add-data', f'bem_statics{os.pathsep}bem_statics'  # you can add your own additional resources
     ]
 
     return parms

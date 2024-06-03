@@ -49,7 +49,7 @@ def draw():
         with ui.select(selects, value=repo, on_change=lambda v: set_repo(v.value), label=_p('Repo')) \
                 .props('outlined').style("min-width:200px; max-width: 300px") \
                 .add_slot('prepend'):
-            ui.icon('settings').on('click', lambda: ui.notify('Settings'))
+            ui.icon('settings').on('click', lambda: ui.notify('TODO'))
 
         search_field = ui.input(on_change=search, placeholder=_p('Search')) \
             .props('outlined rounded item-aligned input-class="ml-3" debounce="500"') \

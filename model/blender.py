@@ -3,7 +3,7 @@ import sqlite3
 import json
 from pathlib import Path
 from contextlib import contextmanager
-from public_path import get_bme_db
+from public_path import get_bem_db
 
 
 @contextmanager
@@ -50,7 +50,7 @@ class Blender():
 
     @staticmethod
     def db_path() -> Path:
-        return get_bme_db().joinpath('blender.db')
+        return get_bem_db().joinpath('blender.db')
 
     def save_to_db(self):
         """Save or update the record in blenders table."""

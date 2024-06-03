@@ -1,5 +1,5 @@
 import json
-from public_path import get_bme_db
+from public_path import get_bem_db
 from nicegui import app
 
 
@@ -10,7 +10,7 @@ class Config:
         self._load()
 
     def _load(self):
-        fp = get_bme_db().joinpath('config.json')
+        fp = get_bem_db().joinpath('config.json')
         if not fp.exists():
             self.data = {}
             return
@@ -18,6 +18,6 @@ class Config:
             self.data = json.load(f)
 
     def _save(self):
-        fp = get_bme_db().joinpath('config.json')
+        fp = get_bem_db().joinpath('config.json')
         with open(fp, 'w', encoding='utf-8') as f:
             json.dump(self.data, f)
