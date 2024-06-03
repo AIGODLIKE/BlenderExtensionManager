@@ -68,16 +68,16 @@ async def verify_blender(b3d: Blender, set_active=True) -> Union[Blender, bool]:
     finally:
         popen.kill()
 
-    b3d.save_to_db()
-
-    if b3d.is_valid is False:
-        await _error_n()
-        return False
-
-    if set_active:
+    if set_active and b3d.is_valid:
         b3d.is_active = True
         app.storage.general['blender_path'] = b3d.path
         app.storage.general['blender_version'] = b3d.big_version
+
+    b3d.save_to_db()
+
+    if not b3d.is_valid:
+        await _error_n()
+        return False
 
     return b3d
 
@@ -96,6 +96,7 @@ class BlenderCard(ui.card):
 
                 with ui.column().classes('w-full items-start gap-1') as self.active_draw:
                     self.draw_active()
+
     @ui.refreshable
     def draw_active(self):
         b3d = self.blender
