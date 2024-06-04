@@ -78,7 +78,8 @@ async def verify_blender(b3d: Blender, set_active=True) -> Union[Blender, bool]:
     if not b3d.is_valid:
         await _error_n()
         return False
-
+    await asyncio.sleep(1)
+    n.dismiss()
     return b3d
 
 

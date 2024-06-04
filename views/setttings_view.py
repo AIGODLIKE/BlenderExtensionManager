@@ -29,12 +29,10 @@ def on_change_lang(v):
 
 
 def basic_card(text: str) -> ui.element:
-    with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
-        with ui.card().classes('w-96 gap-5 no-shadow').tight().props('bordered'):
-            with ui.row().classes('w-full items-center px-2') as card:
-                ui.label(_p(text))
-                ui.space()
-                return card
+    with ui.item().classes('w-full items-center px-2') as row:
+        ui.label(_p(text))
+        ui.space()
+        return row
 
 
 def draw(tabs: ui.element):
@@ -43,21 +41,22 @@ def draw(tabs: ui.element):
         # ui.button(_p('Save'), icon='save', on_click=save_config).props('rounded no-caps').classes('h-12')
 
     with ui.column().classes('w-full px-0 p-0 gap-1 items-center'):
-        with basic_card("Default Tab"):
-            ui.select(value=app.storage.general.get('default_tab','Blender'),options={
-                'Blender': _p('Blender'),
-                'Extensions': _p('Extensions'),
-                'Settings': _p('Settings')
-            }, ).bind_value(app.storage.general, 'default_tab')
+        with ui.list().classes('w-96').props('bordered dense separator'):
+            with basic_card("Default Tab"):
+                ui.select(value=app.storage.general.get('default_tab','Blender'),options={
+                    'Blender': _p('Blender'),
+                    'Extensions': _p('Extensions'),
+                    'Settings': _p('Settings')
+                }, ).bind_value(app.storage.general, 'default_tab')
 
-        with basic_card("Theme"):
-            ui.select(value = app.storage.general.get('dark_mode','white'),options={
-                'white': _p('White'),
-                'dark': _p('Dark'),
-            }, on_change=lambda v: on_change_theme(v, tabs)).bind_value(app.storage.general, 'dark_mode')
+            with basic_card("Theme"):
+                ui.select(value = app.storage.general.get('dark_mode','white'),options={
+                    'white': _p('White'),
+                    'dark': _p('Dark'),
+                }, on_change=lambda v: on_change_theme(v, tabs)).bind_value(app.storage.general, 'dark_mode')
 
-        with basic_card("Language"):
-            ui.select(value = app.storage.general.get('language','en_US'),options={
-                'zh_CN': '中文',
-                'en_US': 'English'
-            }, on_change=on_change_lang).bind_value(app.storage.general, 'language')
+            with basic_card("Language"):
+                ui.select(value = app.storage.general.get('language','en_US'),options={
+                    'zh_CN': '中文',
+                    'en_US': 'English'
+                }, on_change=on_change_lang).bind_value(app.storage.general, 'language')

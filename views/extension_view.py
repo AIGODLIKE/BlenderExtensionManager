@@ -31,7 +31,9 @@ def draw():
 
     res, new_repos = get_b3d_local_repos()
     if not res: new_repos = {}
-    warning = ui.label(_p('No local repo or local repo not init by blender')).style('color:red')
+    warning = ui.element('q-banner')
+    with warning.classes('bg-red w-full text-white'):
+        ui.label(_p('No local repo or local repo not init by blender'))
     warning.set_visibility(not res)
 
     repos, set_repos = ui.state(list(new_repos))
